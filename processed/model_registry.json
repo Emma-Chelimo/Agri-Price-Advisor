@@ -1,0 +1,459 @@
+{
+  "created": "2026-10-24 13:39 UTC",
+  "selection_split": "validation",
+  "validation_window": "origins 2022-01 to 2024-01 (exclusive)",
+  "selection_rule": "highest mean validation skill over horizons 1-6, must exceed 0.02 to replace naive",
+  "candidates": [
+    "naive",
+    "seasonal_naive",
+    "xgb_current"
+  ],
+  "interval_level": 0.8,
+  "max_horizon": 6,
+  "crops": {
+    "Maize": {
+      "model": "naive",
+      "label": "Same as last month (naive)",
+      "mean_validation_skill": 0.0,
+      "reason": "no method beat naive on validation; best challenger was xgb_current at -0.340",
+      "horizons": {
+        "1": {
+          "validation_MAPE": 11.03,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1981,
+          "band_log_high": 0.1981,
+          "log_sigma": 0.1546,
+          "band_pairs": 181,
+          "band_source": "crop",
+          "test_band_coverage": 0.845,
+          "test_pairs": 401
+        },
+        "2": {
+          "validation_MAPE": 17.19,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2826,
+          "band_log_high": 0.2826,
+          "log_sigma": 0.2205,
+          "band_pairs": 171,
+          "band_source": "crop",
+          "test_band_coverage": 0.843,
+          "test_pairs": 375
+        },
+        "3": {
+          "validation_MAPE": 21.65,
+          "validation_skill": 0.0,
+          "band_log_low": -0.3396,
+          "band_log_high": 0.3396,
+          "log_sigma": 0.265,
+          "band_pairs": 160,
+          "band_source": "crop",
+          "test_band_coverage": 0.814,
+          "test_pairs": 349
+        },
+        "4": {
+          "validation_MAPE": 26.18,
+          "validation_skill": 0.0,
+          "band_log_low": -0.4048,
+          "band_log_high": 0.4048,
+          "log_sigma": 0.3159,
+          "band_pairs": 148,
+          "band_source": "crop",
+          "test_band_coverage": 0.852,
+          "test_pairs": 324
+        },
+        "5": {
+          "validation_MAPE": 29.44,
+          "validation_skill": 0.0,
+          "band_log_low": -0.447,
+          "band_log_high": 0.447,
+          "log_sigma": 0.3488,
+          "band_pairs": 136,
+          "band_source": "crop",
+          "test_band_coverage": 0.833,
+          "test_pairs": 300
+        },
+        "6": {
+          "validation_MAPE": 30.19,
+          "validation_skill": 0.0,
+          "band_log_low": -0.4787,
+          "band_log_high": 0.4787,
+          "log_sigma": 0.3735,
+          "band_pairs": 124,
+          "band_source": "crop",
+          "test_band_coverage": 0.851,
+          "test_pairs": 275
+        }
+      }
+    },
+    "Maize flour": {
+      "model": "naive",
+      "label": "Same as last month (naive)",
+      "mean_validation_skill": 0.0,
+      "reason": "no method beat naive on validation; best challenger was xgb_current at -0.368",
+      "horizons": {
+        "1": {
+          "validation_MAPE": 7.65,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1229,
+          "band_log_high": 0.1229,
+          "log_sigma": 0.0959,
+          "band_pairs": 183,
+          "band_source": "crop",
+          "test_band_coverage": 0.876,
+          "test_pairs": 418
+        },
+        "2": {
+          "validation_MAPE": 11.86,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1975,
+          "band_log_high": 0.1975,
+          "log_sigma": 0.1541,
+          "band_pairs": 173,
+          "band_source": "crop",
+          "test_band_coverage": 0.885,
+          "test_pairs": 392
+        },
+        "3": {
+          "validation_MAPE": 15.49,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2613,
+          "band_log_high": 0.2613,
+          "log_sigma": 0.2039,
+          "band_pairs": 162,
+          "band_source": "crop",
+          "test_band_coverage": 0.956,
+          "test_pairs": 366
+        },
+        "4": {
+          "validation_MAPE": 17.84,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2726,
+          "band_log_high": 0.2726,
+          "log_sigma": 0.2127,
+          "band_pairs": 150,
+          "band_source": "crop",
+          "test_band_coverage": 0.918,
+          "test_pairs": 341
+        },
+        "5": {
+          "validation_MAPE": 19.78,
+          "validation_skill": 0.0,
+          "band_log_low": -0.3552,
+          "band_log_high": 0.3552,
+          "log_sigma": 0.2771,
+          "band_pairs": 138,
+          "band_source": "crop",
+          "test_band_coverage": 0.965,
+          "test_pairs": 317
+        },
+        "6": {
+          "validation_MAPE": 20.88,
+          "validation_skill": 0.0,
+          "band_log_low": -0.3873,
+          "band_log_high": 0.3873,
+          "log_sigma": 0.3022,
+          "band_pairs": 126,
+          "band_source": "crop",
+          "test_band_coverage": 0.966,
+          "test_pairs": 292
+        }
+      }
+    },
+    "Beans": {
+      "model": "naive",
+      "label": "Same as last month (naive)",
+      "mean_validation_skill": 0.0,
+      "reason": "no method beat naive on validation; best challenger was xgb_current at -0.256",
+      "horizons": {
+        "1": {
+          "validation_MAPE": 9.63,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1646,
+          "band_log_high": 0.1646,
+          "log_sigma": 0.1285,
+          "band_pairs": 183,
+          "band_source": "crop",
+          "test_band_coverage": 0.88,
+          "test_pairs": 418
+        },
+        "2": {
+          "validation_MAPE": 15.23,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2464,
+          "band_log_high": 0.2464,
+          "log_sigma": 0.1922,
+          "band_pairs": 173,
+          "band_source": "crop",
+          "test_band_coverage": 0.878,
+          "test_pairs": 392
+        },
+        "3": {
+          "validation_MAPE": 17.09,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2936,
+          "band_log_high": 0.2936,
+          "log_sigma": 0.2291,
+          "band_pairs": 162,
+          "band_source": "crop",
+          "test_band_coverage": 0.883,
+          "test_pairs": 366
+        },
+        "4": {
+          "validation_MAPE": 17.03,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2786,
+          "band_log_high": 0.2786,
+          "log_sigma": 0.2174,
+          "band_pairs": 150,
+          "band_source": "crop",
+          "test_band_coverage": 0.848,
+          "test_pairs": 341
+        },
+        "5": {
+          "validation_MAPE": 18.16,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2978,
+          "band_log_high": 0.2978,
+          "log_sigma": 0.2324,
+          "band_pairs": 138,
+          "band_source": "crop",
+          "test_band_coverage": 0.839,
+          "test_pairs": 317
+        },
+        "6": {
+          "validation_MAPE": 19.16,
+          "validation_skill": 0.0,
+          "band_log_low": -0.3285,
+          "band_log_high": 0.3285,
+          "log_sigma": 0.2563,
+          "band_pairs": 126,
+          "band_source": "crop",
+          "test_band_coverage": 0.839,
+          "test_pairs": 292
+        }
+      }
+    },
+    "Sorghum": {
+      "model": "naive",
+      "label": "Same as last month (naive)",
+      "mean_validation_skill": 0.0,
+      "reason": "no method beat naive on validation; best challenger was xgb_current at -0.376",
+      "horizons": {
+        "1": {
+          "validation_MAPE": 8.08,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1404,
+          "band_log_high": 0.1404,
+          "log_sigma": 0.1096,
+          "band_pairs": 155,
+          "band_source": "crop",
+          "test_band_coverage": 0.766,
+          "test_pairs": 363
+        },
+        "2": {
+          "validation_MAPE": 12.08,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1967,
+          "band_log_high": 0.1967,
+          "log_sigma": 0.1535,
+          "band_pairs": 146,
+          "band_source": "crop",
+          "test_band_coverage": 0.713,
+          "test_pairs": 338
+        },
+        "3": {
+          "validation_MAPE": 14.28,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2426,
+          "band_log_high": 0.2426,
+          "log_sigma": 0.1893,
+          "band_pairs": 135,
+          "band_source": "crop",
+          "test_band_coverage": 0.7,
+          "test_pairs": 313
+        },
+        "4": {
+          "validation_MAPE": 17.76,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2918,
+          "band_log_high": 0.2918,
+          "log_sigma": 0.2277,
+          "band_pairs": 125,
+          "band_source": "crop",
+          "test_band_coverage": 0.721,
+          "test_pairs": 290
+        },
+        "5": {
+          "validation_MAPE": 18.7,
+          "validation_skill": 0.0,
+          "band_log_low": -0.3386,
+          "band_log_high": 0.3386,
+          "log_sigma": 0.2642,
+          "band_pairs": 115,
+          "band_source": "crop",
+          "test_band_coverage": 0.728,
+          "test_pairs": 268
+        },
+        "6": {
+          "validation_MAPE": 19.39,
+          "validation_skill": 0.0,
+          "band_log_low": -0.3424,
+          "band_log_high": 0.3424,
+          "log_sigma": 0.2672,
+          "band_pairs": 105,
+          "band_source": "crop",
+          "test_band_coverage": 0.715,
+          "test_pairs": 246
+        }
+      }
+    },
+    "Millet": {
+      "model": "naive",
+      "label": "Same as last month (naive)",
+      "mean_validation_skill": 0.0,
+      "reason": "no method beat naive on validation; best challenger was xgb_current at -0.264",
+      "horizons": {
+        "1": {
+          "validation_MAPE": 9.48,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1452,
+          "band_log_high": 0.1452,
+          "log_sigma": 0.1133,
+          "band_pairs": 119,
+          "band_source": "crop",
+          "test_band_coverage": 0.789,
+          "test_pairs": 299
+        },
+        "2": {
+          "validation_MAPE": 11.97,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1828,
+          "band_log_high": 0.1828,
+          "log_sigma": 0.1426,
+          "band_pairs": 112,
+          "band_source": "crop",
+          "test_band_coverage": 0.726,
+          "test_pairs": 277
+        },
+        "3": {
+          "validation_MAPE": 13.14,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2273,
+          "band_log_high": 0.2273,
+          "log_sigma": 0.1774,
+          "band_pairs": 105,
+          "band_source": "crop",
+          "test_band_coverage": 0.694,
+          "test_pairs": 255
+        },
+        "4": {
+          "validation_MAPE": 13.63,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2231,
+          "band_log_high": 0.2231,
+          "log_sigma": 0.1741,
+          "band_pairs": 98,
+          "band_source": "crop",
+          "test_band_coverage": 0.63,
+          "test_pairs": 235
+        },
+        "5": {
+          "validation_MAPE": 13.4,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1871,
+          "band_log_high": 0.1871,
+          "log_sigma": 0.146,
+          "band_pairs": 92,
+          "band_source": "crop",
+          "test_band_coverage": 0.544,
+          "test_pairs": 215
+        },
+        "6": {
+          "validation_MAPE": 14.39,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2354,
+          "band_log_high": 0.2354,
+          "log_sigma": 0.1837,
+          "band_pairs": 85,
+          "band_source": "crop",
+          "test_band_coverage": 0.579,
+          "test_pairs": 195
+        }
+      }
+    },
+    "Cassava flour": {
+      "model": "naive",
+      "label": "Same as last month (naive)",
+      "mean_validation_skill": 0.0,
+      "reason": "no method beat naive on validation; best challenger was xgb_current at -0.448",
+      "horizons": {
+        "1": {
+          "validation_MAPE": 5.77,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1133,
+          "band_log_high": 0.1133,
+          "log_sigma": 0.0884,
+          "band_pairs": 130,
+          "band_source": "crop",
+          "test_band_coverage": 0.774,
+          "test_pairs": 350
+        },
+        "2": {
+          "validation_MAPE": 9.23,
+          "validation_skill": 0.0,
+          "band_log_low": -0.1708,
+          "band_log_high": 0.1708,
+          "log_sigma": 0.1333,
+          "band_pairs": 122,
+          "band_source": "crop",
+          "test_band_coverage": 0.783,
+          "test_pairs": 327
+        },
+        "3": {
+          "validation_MAPE": 11.19,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2161,
+          "band_log_high": 0.2161,
+          "log_sigma": 0.1686,
+          "band_pairs": 114,
+          "band_source": "crop",
+          "test_band_coverage": 0.772,
+          "test_pairs": 303
+        },
+        "4": {
+          "validation_MAPE": 12.49,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2231,
+          "band_log_high": 0.2231,
+          "log_sigma": 0.1741,
+          "band_pairs": 106,
+          "band_source": "crop",
+          "test_band_coverage": 0.74,
+          "test_pairs": 281
+        },
+        "5": {
+          "validation_MAPE": 13.04,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2231,
+          "band_log_high": 0.2231,
+          "log_sigma": 0.1741,
+          "band_pairs": 99,
+          "band_source": "crop",
+          "test_band_coverage": 0.7,
+          "test_pairs": 260
+        },
+        "6": {
+          "validation_MAPE": 14.88,
+          "validation_skill": 0.0,
+          "band_log_low": -0.2719,
+          "band_log_high": 0.2719,
+          "log_sigma": 0.2122,
+          "band_pairs": 91,
+          "band_source": "crop",
+          "test_band_coverage": 0.718,
+          "test_pairs": 238
+        }
+      }
+    }
+  }
+}

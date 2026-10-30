@@ -1,0 +1,25 @@
+# Private: API keys, admin password, and farmers' and providers' contacts
+.streamlit/secrets.toml
+data/
+
+# Rebuilt by scripts/run_pipeline.py
+processed/backtest_fast/
+
+# Old files kept only for reference
+_archive/
+
+# Python and tools
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.vscode/
+
+# Front end: dependencies are reinstalled with npm; the built dist/ is kept so the
+# app runs with Python only
+frontend/node_modules/
+e2e-screens/
+
+#notebook
+AgriPrice_Advisor_EDA_and_Modeling 
+

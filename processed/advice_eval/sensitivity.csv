@@ -1,0 +1,5 @@
+scenario,decisions,advised_other_market_pct,full_advice_gain_pct,full_advice_better_pct,full_advice_worse_pct
+"main (transport 3 UGX/kg/km, 1-month delay, jump guard on)",3149,55.3,14.54,45.3,9.0
+without the sudden-jump guard,3149,56.2,14.57,45.7,9.5
+transport cost doubled,3149,31.8,6.56,24.9,6.0
+no delay before selling at another market,3149,55.3,19.19,55.3,0.0

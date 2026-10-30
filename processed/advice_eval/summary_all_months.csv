@@ -1,0 +1,7 @@
+crop,decisions,advised_store_pct,advised_other_market_pct,avg_harvest_sale_ugx,timing_advice_n,timing_advice_gain_ugx,timing_advice_gain_pct,timing_advice_better_pct,timing_advice_worse_pct,full_advice_n,full_advice_gain_ugx,full_advice_gain_pct,full_advice_better_pct,full_advice_worse_pct,store_3_n,store_3_gain_ugx,store_3_gain_pct,store_3_better_pct,store_3_worse_pct,store_6_n,store_6_gain_ugx,store_6_gain_pct,store_6_better_pct,store_6_worse_pct,hindsight_n,hindsight_gain_ugx,hindsight_gain_pct,hindsight_better_pct,hindsight_worse_pct
+Beans,1894,0.0,55.3,3390333,1894,0,0.0,0.0,0.0,1874,294145,8.67,44.6,10.2,1765,-202274,-5.95,34.8,65.2,1662,-400632,-11.8,27.2,72.8,1894,297584,8.78,59.2,0.0
+Cassava flour,1753,0.0,63.9,1810039,1753,0,0.0,0.0,0.0,1732,713506,39.36,58.7,4.8,1611,-108580,-5.97,29.4,70.6,1494,-223758,-12.25,26.4,73.6,1753,190237,10.51,51.2,0.0
+Maize,1854,0.0,39.3,1295938,1854,0,0.0,0.0,0.0,1830,67020,5.17,29.1,9.3,1727,-80045,-6.17,37.6,62.4,1629,-165704,-12.84,33.9,66.1,1854,177257,13.68,62.4,0.0
+Maize flour,1984,0.0,38.4,2272783,1984,0,0.0,0.0,0.0,1978,107647,4.73,30.3,7.9,1843,-135360,-5.93,32.8,67.2,1734,-281534,-12.33,26.8,73.2,1984,165122,7.27,54.1,0.0
+Millet,1463,0.0,58.1,2636186,1463,0,0.0,0.0,0.0,1423,260344,9.91,47.2,9.8,1336,-30540,-1.16,40.6,59.4,1244,-70006,-2.69,38.7,61.3,1463,500295,18.98,67.2,0.0
+Sorghum,1694,0.0,64.9,1662435,1694,0,0.0,0.0,0.0,1649,602240,36.09,59.9,4.1,1555,-57454,-3.47,37.0,63.0,1470,-110871,-6.78,34.8,65.2,1694,209215,12.58,62.3,0.0

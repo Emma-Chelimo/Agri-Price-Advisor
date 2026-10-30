@@ -1,0 +1,5 @@
+crop,decisions,advised_store_pct,advised_other_market_pct,avg_harvest_sale_ugx,timing_advice_n,timing_advice_gain_ugx,timing_advice_gain_pct,timing_advice_better_pct,timing_advice_worse_pct,full_advice_n,full_advice_gain_ugx,full_advice_gain_pct,full_advice_better_pct,full_advice_worse_pct,store_3_n,store_3_gain_ugx,store_3_gain_pct,store_3_better_pct,store_3_worse_pct,store_6_n,store_6_gain_ugx,store_6_gain_pct,store_6_better_pct,store_6_worse_pct,hindsight_n,hindsight_gain_ugx,hindsight_gain_pct,hindsight_better_pct,hindsight_worse_pct
+Beans,800,0.0,56.6,3293537,800,0,0.0,0.0,0.0,787,310113,9.41,44.9,11.1,738,-74251,-2.24,42.4,57.6,691,-291212,-8.86,32.6,67.4,800,340964,10.35,60.1,0.0
+Maize,776,0.0,38.7,1315624,776,0,0.0,0.0,0.0,764,40147,3.05,24.7,13.0,725,-139825,-10.54,32.1,67.9,673,-188485,-14.39,34.3,65.7,776,152802,11.61,55.2,0.0
+Millet,716,0.0,60.3,2619770,716,0,0.0,0.0,0.0,698,285889,10.92,50.7,8.6,666,-52987,-2.03,39.6,60.4,583,40908,1.6,43.2,56.8,716,506798,19.35,65.6,0.0
+Sorghum,857,0.0,64.9,1646790,857,0,0.0,0.0,0.0,835,617700,37.31,60.0,4.0,790,-74625,-4.52,32.8,67.2,709,-96913,-5.99,37.5,62.5,857,194233,11.79,58.8,0.0
