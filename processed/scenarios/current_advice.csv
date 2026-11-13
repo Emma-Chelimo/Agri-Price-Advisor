@@ -1,0 +1,155 @@
+commodity,market,model,latest_price,price_month,months_old,stale,forecast_1_2_3,outcome,home_recommendation,best_store_months,best_store_prob_pct,gain_ugx,confidence_shown_pct,confidence_label,sell_market,alt_extra_ugx
+Beans,Busia,pooled_gbm,2575,2025-12,4,False,2769/2991/3160,Go to another market and store 3 months,Store 3 months,3,88,384922,77,High,Iganga,332763.0
+Beans,Fort Portal,pooled_gbm,4309,2026-04,0,False,4446/4303/4168,Store 1 month at home,Store 1 month,1,61,50310,55,Low: a close call,Fort Portal,-620870.0
+Beans,Gulu,pooled_gbm,4956,2026-04,0,False,5104/4872/4316,Store 1 month at home,Store 1 month,1,61,51440,45,Low: a close call,Gulu,-1472835.0
+Beans,Hoima,pooled_gbm,4000,2025-12,4,False,3954/4065/4288,Go to another market and sell now,Store 3 months,3,65,37920,55,Low: a close call,Kasese,182080.0
+Beans,Iganga,pooled_gbm,3289,2025-12,4,False,3434/3658/3797,Store 3 months at home,Store 3 months,3,80,279685,59,Low: a close call,Iganga,-56685.0
+Beans,Jinja,pooled_gbm,4211,2026-04,0,False,4406/4221/3954,Go to another market and store 1 month,Store 1 month,1,66,108910,55,Low: a close call,Owino,6695.0
+Beans,Kaabong,pooled_gbm,2957,2026-01,3,False,3183/3353/3783,Go to another market and sell now,Store 3 months,3,93,598306,80,High,Napak,384694.0
+Beans,Kapchorwa,pooled_gbm,2500,2025-12,4,False,2699/2944/3148,Go to another market and store 3 months,Store 3 months,3,91,448454,78,High,Soroti,340848.0
+Beans,Karenga,pooled_gbm,3686,2026-01,3,False,3770/3825/4126,Store 3 months at home,Store 3 months,3,74,197101,59,Low: a close call,Karenga,-101.0
+Beans,Karita,pooled_gbm,4045,2026-01,3,False,4124/4151/4414,Store 3 months at home,Store 3 months,3,69,113335,55,Low: a close call,Karita,-26335.0
+Beans,Kasese,pooled_gbm,5000,2025-12,4,False,4840/4870/5029,Sell now at home (storing close but under 60%),Sell now,3,51,0,47,Low: a close call,Kasese,-1742080.0
+Beans,Kotido,pooled_gbm,2997,2026-01,3,False,3181/3311/3672,Go to another market and sell now,Store 3 months,3,88,452226,77,High,Napak,721774.0
+Beans,Lira,pooled_gbm,3500,2025-12,4,False,3500/3639/3746,Store 3 months at home,Store 3 months,3,65,19946,55,Low: a close call,Lira,-40946.0
+Beans,Makaratin,pooled_gbm,2981,2026-01,3,False,3142/3249/3600,Go to another market and sell now,Store 3 months,3,86,399418,67,Medium,Napak,793582.0
+Beans,Masaka,pooled_gbm,3500,2026-04,0,False,3774/3451/3370,Go to another market and store 1 month,Store 1 month,1,76,197390,59,Low: a close call,Owino,443215.0
+Beans,Masindi,pooled_gbm,2667,2025-12,4,False,2774/3050/3386,Go to another market and sell now,Store 3 months,3,92,508904,78,High,Kasese,855096.0
+Beans,Mbale,pooled_gbm,3460,2026-04,0,False,3721/3535/3348,Go to another market and store 1 month,Store 1 month,1,75,185185,59,Low: a close call,Gulu,267255.0
+Beans,Mbarara,pooled_gbm,3604,2026-04,0,False,3820/3719/3602,Go to another market and store 1 month,Store 1 month,1,71,138700,55,Low: a close call,Fort Portal,43610.0
+Beans,Moroto,pooled_gbm,3707,2026-01,3,False,3815/3889/4205,Go to another market and sell now,Store 3 months,3,77,251599,59,Low: a close call,Napak,341401.0
+Beans,Mukono,pooled_gbm,4707,2025-04,12,True,4919/4414/4252,Store 1 month at home,Store 1 month,1,66,118215,55,Low: a close call,Mukono,-567145.0
+Beans,Nabilatuk,pooled_gbm,3358,2026-01,3,False,3486/3595/3904,Go to another market and sell now,Store 3 months,3,81,312942,59,Low: a close call,Napak,692058.0
+Beans,Namalu,pooled_gbm,3080,2026-01,3,False,3237/3342/3680,Go to another market and sell now,Store 3 months,3,85,376872,63,Medium,Napak,822128.0
+Beans,Napak,pooled_gbm,4516,2026-01,3,False,4528/4474/4710,Sell now at home (storing close but under 60%),Sell now,3,59,0,47,Low: a close call,Napak,-741665.0
+Beans,Owino,pooled_gbm,4514,2026-04,0,False,4693/4340/4246,Store 1 month at home,Store 1 month,1,64,88605,55,Low: a close call,Owino,-558695.0
+Beans,Soroti,pooled_gbm,3560,2025-12,4,False,3677/3835/3941,Store 3 months at home,Store 3 months,3,72,146302,59,Low: a close call,Soroti,-383302.0
+Beans,Tororo,pooled_gbm,3500,2025-04,12,True,3819/3679/3439,Go to another market and store 1 month,Store 1 month,1,80,241715,59,Low: a close call,Mukono,447500.0
+Beans,Wakiso,pooled_gbm,4184,2025-04,12,True,4462/4128/4016,Go to another market and store 1 month,Store 1 month,1,73,191070,59,Low: a close call,Mukono,333145.0
+Cassava flour,Busia,naive,1500,2025-12,4,False,1500/1500/1500,Sell now at home (storing close but under 60%),Sell now,3,57,0,47,Low: a close call,Busia,-218000.0
+Cassava flour,Fort Portal,naive,1500,2026-04,0,False,1500/1500/1500,Go to another market and sell now,Sell now,3,57,0,47,Low: a close call,Gulu,991000.0
+Cassava flour,Gulu,naive,3760,2026-04,0,False,3760/3760/3760,Sell now at home (storing close but under 60%),Sell now,3,62,0,47,Low: a close call,Gulu,-2842000.0
+Cassava flour,Hoima,naive,2000,2025-12,4,False,2000/2000/2000,Go to another market and sell now,Sell now,3,59,0,47,Low: a close call,Masindi,141000.0
+Cassava flour,Iganga,naive,1300,2025-12,4,False,1300/1300/1300,Go to another market and sell now,Sell now,3,56,0,47,Low: a close call,Lira,156000.0
+Cassava flour,Jinja,naive,1724,2026-04,0,False,1724/1724/1724,Go to another market and sell now,Sell now,3,58,0,47,Low: a close call,Gulu,947000.0
+Cassava flour,Kaabong,naive,2443,2026-01,3,False,2443/2443/2443,Sell now at home (storing close but under 60%),Sell now,3,60,0,47,Low: a close call,Kaabong,-662000.0
+Cassava flour,Kapchorwa,naive,1500,2025-12,4,False,1500/1500/1500,Sell now at home (storing close but under 60%),Sell now,3,57,0,47,Low: a close call,Kapchorwa,-89000.0
+Cassava flour,Karenga,naive,1779,2026-01,3,False,1779/1779/1779,Go to another market and sell now,Sell now,3,58,0,47,Low: a close call,Kaabong,481000.0
+Cassava flour,Kasese,naive,886,2025-12,4,False,886/886/886,Go to another market and sell now,Sell now,3,52,0,47,Low: a close call,Masindi,478000.0
+Cassava flour,Kiboga,naive,1413,2014-04,144,True,1413/1413/1413,Sell now at home (storing close but under 60%),Sell now,3,57,0,47,Low: a close call,Kiboga,
+Cassava flour,Kotido,naive,2015,2026-01,3,False,2015/2015/2015,Go to another market and sell now,Sell now,3,59,0,47,Low: a close call,Kaabong,194000.0
+Cassava flour,Lira,naive,2200,2025-12,4,False,2200/2200/2200,Sell now at home (storing close but under 60%),Sell now,3,60,0,47,Low: a close call,Lira,-437000.0
+Cassava flour,Makaratin,naive,478,2026-01,3,False,478/478/478,Go to another market and sell now,Sell now,3,42,0,49,Low: a close call,Kaabong,1548000.0
+Cassava flour,Masaka,naive,1525,2025-12,4,False,1525/1525/1525,Sell now at home (storing close but under 60%),Sell now,3,57,0,47,Low: a close call,Masaka,-77000.0
+Cassava flour,Masindi,naive,2333,2025-12,4,False,2333/2333/2333,Sell now at home (storing close but under 60%),Sell now,3,60,0,47,Low: a close call,Masindi,-525000.0
+Cassava flour,Mbale,naive,1651,2026-04,0,False,1651/1651/1651,Go to another market and sell now,Sell now,3,58,0,47,Low: a close call,Gulu,1014000.0
+Cassava flour,Mbarara,naive,1972,2026-04,0,False,1972/1972/1972,Go to another market and sell now,Sell now,3,59,0,47,Low: a close call,Gulu,156000.0
+Cassava flour,Moroto,naive,1594,2026-01,3,False,1594/1594/1594,Go to another market and sell now,Sell now,3,58,0,47,Low: a close call,Kaabong,354000.0
+Cassava flour,Mukono,naive,2092,2025-04,12,True,2092/2092/2092,Sell now at home (storing close but under 60%),Sell now,3,59,0,47,Low: a close call,Mukono,-640000.0
+Cassava flour,Napak,naive,749,2026-01,3,False,749/749/749,Go to another market and sell now,Sell now,3,50,0,47,Low: a close call,Kaabong,1118000.0
+Cassava flour,Owino,naive,1986,2026-04,0,False,1986/1986/1986,Go to another market and sell now,Sell now,3,59,0,47,Low: a close call,Gulu,706000.0
+Cassava flour,Soroti,naive,1153,2025-12,4,False,1153/1153/1153,Go to another market and sell now,Sell now,3,55,0,47,Low: a close call,Lira,666000.0
+Cassava flour,Tororo,naive,1000,2025-04,12,True,1000/1000/1000,Go to another market and sell now,Sell now,3,54,0,47,Low: a close call,Mukono,456000.0
+Cassava flour,Wakiso,naive,1569,2025-04,12,True,1569/1569/1569,Go to another market and sell now,Sell now,3,58,0,47,Low: a close call,Mukono,406000.0
+Maize,Busia,pooled_shrunk,1250,2025-12,4,False,1232/1192/1233,Go to another market and sell now,Sell now,3,40,0,49,Low: a close call,Jinja,226000.0
+Maize,Fort Portal,pooled_shrunk,2250,2025-12,4,False,2178/2053/2042,Sell now at home,Sell now,1,34,0,61,Medium,Fort Portal,-356000.0
+Maize,Gulu,pooled_shrunk,1949,2026-04,0,False,2014/2149/2167,Store 2 months at home,Store 2 months,3,62,140703,55,Low: a close call,Gulu,
+Maize,Hoima,pooled_shrunk,1500,2025-12,4,False,1464/1404/1407,Go to another market and sell now,Sell now,1,35,0,61,Medium,Fort Portal,177000.0
+Maize,Iganga,pooled_shrunk,1533,2025-12,4,False,1511/1468/1511,Go to another market and sell now,Sell now,3,41,0,49,Low: a close call,Jinja,186000.0
+Maize,Jinja,pooled_shrunk,1863,2025-12,4,False,1836/1762/1784,Sell now at home,Sell now,1,38,0,50,Low: a close call,Jinja,-474000.0
+Maize,Kaabong,pooled_shrunk,1232,2026-01,3,False,1230/1253/1292,Sell now at home (storing close but under 60%),Sell now,3,50,0,47,Low: a close call,Kaabong,-345000.0
+Maize,Kapchorwa,pooled_shrunk,1000,2025-12,4,False,1006/1011/1056,Go to another market and sell now,Sell now,3,49,0,47,Low: a close call,Jinja,155000.0
+Maize,Karenga,pooled_shrunk,985,2026-01,3,False,986/1014/1048,Go to another market and sell now,Sell now,3,50,0,47,Low: a close call,Kaabong,64000.0
+Maize,Karita,pooled_shrunk,1055,2026-01,3,False,1060/1094/1139,Sell now at home (storing close but under 60%),Sell now,3,53,0,47,Low: a close call,Karita,-79000.0
+Maize,Kasese,pooled_shrunk,2000,2025-12,4,False,1931/1812/1806,Go to another market and sell now,Sell now,1,33,0,65,Medium,Mbarara,44000.0
+Maize,Kotido,pooled_shrunk,1007,2026-01,3,False,1007/1036/1075,Go to another market and sell now,Sell now,3,51,0,47,Low: a close call,Moroto,66000.0
+Maize,Lira,pooled_shrunk,920,2025-12,4,False,927/952/983,Go to another market and sell now,Sell now,3,50,0,47,Low: a close call,Jinja,148000.0
+Maize,Makaratin,pooled_shrunk,902,2026-01,3,False,912/953/999,Go to another market and sell now,Sell now,3,56,0,47,Low: a close call,Moroto,36000.0
+Maize,Masaka,pooled_shrunk,1463,2025-12,4,False,1433/1417/1454,Go to another market and sell now,Sell now,3,42,0,49,Low: a close call,Mbarara,518000.0
+Maize,Masindi,pooled_shrunk,1017,2025-12,4,False,1010/1005/1021,Go to another market and sell now,Sell now,3,41,0,49,Low: a close call,Fort Portal,468000.0
+Maize,Mbale,pooled_shrunk,1300,2025-05,11,True,1341/1367/1305,Sell now at home (storing close but under 60%),Sell now,2,50,0,47,Low: a close call,Mbale,
+Maize,Mbarara,pooled_shrunk,2467,2025-12,4,False,2397/2243/2236,Sell now at home,Sell now,1,35,0,61,Medium,Mbarara,-790000.0
+Maize,Moroto,pooled_shrunk,1382,2026-01,3,False,1376/1386/1435,Sell now at home (storing close but under 60%),Sell now,3,49,0,47,Low: a close call,Moroto,-418880.0
+Maize,Mukono,pooled_shrunk,2301,2025-04,12,True,2332/2385/2269,Sell now at home (storing close but under 60%),Sell now,2,50,0,47,Low: a close call,Mukono,-220944.0
+Maize,Nabilatuk,pooled_shrunk,1042,2026-01,3,False,1045/1077/1122,Go to another market and sell now,Sell now,3,53,0,47,Low: a close call,Moroto,130000.0
+Maize,Namalu,pooled_shrunk,1123,2026-01,3,False,1122/1144/1191,Sell now at home (storing close but under 60%),Sell now,3,51,0,47,Low: a close call,Namalu,-62000.0
+Maize,Napak,pooled_shrunk,1178,2026-01,3,False,1180/1208/1256,Sell now at home (storing close but under 60%),Sell now,3,52,0,47,Low: a close call,Napak,-12000.0
+Maize,Owino,pooled_shrunk,2092,2025-04,12,True,2135/2221/2151,Go to another market and store 2 months,Sell now,2,54,0,47,Low: a close call,Mukono,150583.0
+Maize,Soroti,pooled_shrunk,987,2025-12,4,False,994/1005/1053,Go to another market and sell now,Sell now,3,51,0,47,Low: a close call,Jinja,288000.0
+Maize,Tororo,pooled_shrunk,2000,2025-04,12,True,2011/2062/1969,Sell now at home (storing close but under 60%),Sell now,2,48,0,47,Low: a close call,Tororo,-312417.0
+Maize,Wakiso,pooled_shrunk,2092,2025-04,12,True,2127/2198/2101,Go to another market and store 2 months,Sell now,2,52,0,47,Low: a close call,Mukono,114583.0
+Maize flour,Busia,naive,2338,2025-12,4,False,2338/2338/2338,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Busia,-536000.0
+Maize flour,Fort Portal,naive,3000,2026-04,0,False,3000/3000/3000,Sell now at home (storing close but under 60%),Sell now,3,46,0,49,Low: a close call,Fort Portal,-573000.0
+Maize flour,Gulu,naive,2783,2026-04,0,False,2783/2783/2783,Sell now at home (storing close but under 60%),Sell now,3,46,0,49,Low: a close call,Gulu,-1052000.0
+Maize flour,Hoima,naive,2500,2025-12,4,False,2500/2500/2500,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Hoima,-225000.0
+Maize flour,Iganga,naive,2078,2025-12,4,False,2078/2078/2078,Sell now at home (storing close but under 60%),Sell now,3,44,0,49,Low: a close call,Iganga,-16000.0
+Maize flour,Jinja,naive,2533,2026-04,0,False,2533/2533/2533,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Jinja,-89000.0
+Maize flour,Kaabong,naive,2099,2026-01,3,False,2099/2099/2099,Go to another market and sell now,Sell now,3,44,0,49,Low: a close call,Karenga,792000.0
+Maize flour,Kapchorwa,naive,2200,2025-12,4,False,2200/2200/2200,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Kapchorwa,-297000.0
+Maize flour,Karenga,naive,3074,2026-01,3,False,3074/3074/3074,Sell now at home (storing close but under 60%),Sell now,3,46,0,49,Low: a close call,Karenga,-1158000.0
+Maize flour,Karita,naive,2068,2026-01,3,False,2068/2068/2068,Go to another market and sell now,Sell now,3,44,0,49,Low: a close call,Namalu,242000.0
+Maize flour,Kasese,naive,2686,2025-12,4,False,2686/2686/2686,Sell now at home (storing close but under 60%),Sell now,3,46,0,49,Low: a close call,Kasese,-966000.0
+Maize flour,Kiboga,naive,2050,2014-04,144,True,2050/2050/2050,Sell now at home (storing close but under 60%),Sell now,3,44,0,49,Low: a close call,Kiboga,
+Maize flour,Kotido,naive,1977,2026-01,3,False,1977/1977/1977,Go to another market and sell now,Sell now,3,44,0,49,Low: a close call,Karenga,794000.0
+Maize flour,Lira,naive,1740,2025-12,4,False,1740/1740/1740,Go to another market and sell now,Sell now,3,43,0,49,Low: a close call,Masindi,157000.0
+Maize flour,Makaratin,naive,1858,2026-01,3,False,1858/1858/1858,Go to another market and sell now,Sell now,3,44,0,49,Low: a close call,Karenga,841000.0
+Maize flour,Masaka,naive,2533,2026-04,0,False,2533/2533/2533,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Masaka,-19000.0
+Maize flour,Masindi,naive,2467,2025-12,4,False,2467/2467/2467,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Masindi,-159000.0
+Maize flour,Mbale,naive,2500,2026-04,0,False,2500/2500/2500,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Mbale,-477000.0
+Maize flour,Mbarara,naive,3000,2026-04,0,False,3000/3000/3000,Sell now at home (storing close but under 60%),Sell now,3,46,0,49,Low: a close call,Mbarara,-573000.0
+Maize flour,Moroto,naive,1943,2026-01,3,False,1943/1943/1943,Go to another market and sell now,Sell now,3,44,0,49,Low: a close call,Karenga,522000.0
+Maize flour,Mukono,naive,2615,2025-04,12,True,2615/2615/2615,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Mukono,-117000.0
+Maize flour,Nabilatuk,naive,2511,2026-01,3,False,2511/2511/2511,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Nabilatuk,-168000.0
+Maize flour,Namalu,naive,2457,2026-01,3,False,2457/2457/2457,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Namalu,-60000.0
+Maize flour,Napak,naive,1982,2026-01,3,False,1982/1982/1982,Go to another market and sell now,Sell now,3,44,0,49,Low: a close call,Karenga,459000.0
+Maize flour,Owino,naive,2720,2026-04,0,False,2720/2720/2720,Sell now at home (storing close but under 60%),Sell now,3,46,0,49,Low: a close call,Owino,-463000.0
+Maize flour,Soroti,naive,1947,2025-12,4,False,1947/1947/1947,Sell now at home (storing close but under 60%),Sell now,3,44,0,49,Low: a close call,Soroti,-164000.0
+Maize flour,Tororo,naive,2350,2025-04,12,True,2350/2350/2350,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Tororo,-371000.0
+Maize flour,Wakiso,naive,2615,2025-04,12,True,2615/2615/2615,Sell now at home (storing close but under 60%),Sell now,3,45,0,49,Low: a close call,Wakiso,-117000.0
+Millet,Busia,naive,2463,2025-12,4,False,2463/2463/2463,Go to another market and sell now,Sell now,2,49,0,47,Low: a close call,Masaka,1457000.0
+Millet,Fort Portal,naive,5500,2025-12,4,False,5500/5500/5500,Sell now at home (storing close but under 60%),Sell now,2,52,0,47,Low: a close call,Fort Portal,-1271000.0
+Millet,Gulu,naive,2786,2025-12,4,False,2786/2786/2786,Go to another market and sell now,Sell now,2,50,0,47,Low: a close call,Fort Portal,1445000.0
+Millet,Hoima,naive,4000,2025-12,4,False,4000/4000/4000,Go to another market and sell now,Sell now,2,51,0,47,Low: a close call,Fort Portal,927000.0
+Millet,Iganga,naive,2856,2025-12,4,False,2856/2856/2856,Go to another market and sell now,Sell now,2,50,0,47,Low: a close call,Masaka,1286000.0
+Millet,Jinja,naive,3000,2025-12,4,False,3000/3000/3000,Go to another market and sell now,Sell now,2,50,0,47,Low: a close call,Masaka,1283000.0
+Millet,Kaabong,naive,3068,2026-01,3,False,3068/3068/3068,Sell now at home (storing close but under 60%),Sell now,2,50,0,47,Low: a close call,Kaabong,-661000.0
+Millet,Kapchorwa,naive,3000,2025-12,4,False,3000/3000/3000,Go to another market and sell now,Sell now,2,50,0,47,Low: a close call,Fort Portal,634000.0
+Millet,Karenga,naive,2590,2026-01,3,False,2590/2590/2590,Go to another market and sell now,Sell now,2,50,0,47,Low: a close call,Kaabong,295000.0
+Millet,Kasese,naive,3000,2025-12,4,False,3000/3000/3000,Go to another market and sell now,Sell now,2,50,0,47,Low: a close call,Fort Portal,2269000.0
+Millet,Kotido,naive,1805,2026-01,3,False,1805/1805/1805,Go to another market and sell now,Sell now,2,48,0,47,Low: a close call,Kaabong,1029000.0
+Millet,Lira,naive,2500,2025-12,4,False,2500/2500/2500,Go to another market and sell now,Sell now,2,49,0,47,Low: a close call,Fort Portal,1671000.0
+Millet,Makaratin,naive,2286,2026-01,3,False,2286/2286/2286,Go to another market and sell now,Sell now,2,49,0,47,Low: a close call,Kaabong,365000.0
+Millet,Masaka,naive,5000,2025-12,4,False,5000/5000/5000,Sell now at home (storing close but under 60%),Sell now,2,51,0,47,Low: a close call,Masaka,-271000.0
+Millet,Masindi,naive,3667,2025-12,4,False,3667/3667/3667,Go to another market and sell now,Sell now,2,51,0,47,Low: a close call,Fort Portal,1068000.0
+Millet,Mbale,naive,4750,2025-05,11,True,4750/4750/4750,Sell now at home (storing close but under 60%),Sell now,2,51,0,47,Low: a close call,Mbale,
+Millet,Mbarara,naive,4011,2025-12,4,False,4011/4011/4011,Go to another market and sell now,Sell now,2,51,0,47,Low: a close call,Fort Portal,916000.0
+Millet,Mukono,naive,3975,2025-04,12,True,3975/3975/3975,Go to another market and sell now,Sell now,2,51,0,47,Low: a close call,Owino,651000.0
+Millet,Owino,naive,4707,2025-04,12,True,4707/4707/4707,Sell now at home (storing close but under 60%),Sell now,2,51,0,47,Low: a close call,Owino,-574000.0
+Millet,Soroti,naive,2440,2025-12,4,False,2440/2440/2440,Go to another market and sell now,Sell now,2,49,0,47,Low: a close call,Fort Portal,1542000.0
+Millet,Tororo,naive,3417,2025-04,12,True,3417/3417/3417,Go to another market and sell now,Sell now,2,51,0,47,Low: a close call,Owino,573000.0
+Millet,Wakiso,naive,4184,2025-04,12,True,4184/4184/4184,Go to another market and sell now,Sell now,2,51,0,47,Low: a close call,Owino,472000.0
+Sorghum,Busia,naive,1438,2025-12,4,False,1438/1438/1438,Go to another market and sell now,Sell now,1,44,0,49,Low: a close call,Mbarara,943000.0
+Sorghum,Fort Portal,naive,3813,2025-12,4,False,3813/3813/3813,Sell now at home (storing close but under 60%),Sell now,3,48,0,47,Low: a close call,Fort Portal,-442000.0
+Sorghum,Gulu,naive,2127,2026-04,0,False,2127/2127/2127,Sell now at home (storing close but under 60%),Sell now,1,46,0,49,Low: a close call,Gulu,
+Sorghum,Hoima,naive,3500,2025-12,4,False,3500/3500/3500,Sell now at home (storing close but under 60%),Sell now,3,47,0,47,Low: a close call,Hoima,-260000.0
+Sorghum,Iganga,naive,1844,2025-12,4,False,1844/1844/1844,Go to another market and sell now,Sell now,1,46,0,49,Low: a close call,Mbarara,768000.0
+Sorghum,Jinja,naive,2063,2025-12,4,False,2063/2063/2063,Go to another market and sell now,Sell now,1,46,0,49,Low: a close call,Mbarara,687000.0
+Sorghum,Kaabong,naive,1368,2026-01,3,False,1368/1368/1368,Sell now at home (storing close but under 60%),Sell now,1,44,0,49,Low: a close call,Kaabong,-507000.0
+Sorghum,Kapchorwa,naive,2000,2025-12,4,False,2000/2000/2000,Go to another market and sell now,Sell now,1,46,0,49,Low: a close call,Hoima,126000.0
+Sorghum,Karenga,naive,1044,2026-01,3,False,1044/1044/1044,Go to another market and sell now,Sell now,1,43,0,49,Low: a close call,Kaabong,141000.0
+Sorghum,Kasese,naive,2629,2025-12,4,False,2629/2629/2629,Go to another market and sell now,Sell now,1,47,0,49,Low: a close call,Fort Portal,953000.0
+Sorghum,Kotido,naive,1016,2026-01,3,False,1016/1016/1016,Go to another market and sell now,Sell now,1,43,0,49,Low: a close call,Kaabong,118000.0
+Sorghum,Lira,naive,920,2025-12,4,False,920/920/920,Go to another market and sell now,Sell now,1,42,0,49,Low: a close call,Masindi,1843000.0
+Sorghum,Makaratin,naive,811,2026-01,3,False,811/811/811,Go to another market and sell now,Sell now,1,41,0,49,Low: a close call,Kaabong,140000.0
+Sorghum,Masindi,naive,3333,2025-12,4,False,3333/3333/3333,Sell now at home (storing close but under 60%),Sell now,3,47,0,47,Low: a close call,Masindi,-25000.0
+Sorghum,Mbale,naive,2250,2025-05,11,True,2250/2250/2250,Sell now at home (storing close but under 60%),Sell now,1,46,0,49,Low: a close call,Mbale,
+Sorghum,Mbarara,naive,3944,2025-12,4,False,3944/3944/3944,Sell now at home (storing close but under 60%),Sell now,3,48,0,47,Low: a close call,Mbarara,-704000.0
+Sorghum,Moroto,naive,1327,2026-01,3,False,1327/1327/1327,Sell now at home (storing close but under 60%),Sell now,1,44,0,49,Low: a close call,Moroto,-313000.0
+Sorghum,Mukono,naive,4184,2025-04,12,True,4184/4184/4184,Sell now at home (storing close but under 60%),Sell now,3,48,0,47,Low: a close call,Mukono,-81000.0
+Sorghum,Nabilatuk,naive,1224,2026-01,3,False,1224/1224/1224,Sell now at home (storing close but under 60%),Sell now,1,44,0,49,Low: a close call,Nabilatuk,-107000.0
+Sorghum,Namalu,naive,1140,2026-01,3,False,1140/1140/1140,Sell now at home (storing close but under 60%),Sell now,1,43,0,49,Low: a close call,Namalu,-30000.0
+Sorghum,Napak,naive,790,2026-01,3,False,790/790/790,Go to another market and sell now,Sell now,1,41,0,49,Low: a close call,Moroto,321000.0
+Sorghum,Owino,naive,4184,2025-04,12,True,4184/4184/4184,Sell now at home (storing close but under 60%),Sell now,3,48,0,47,Low: a close call,Owino,-81000.0
+Sorghum,Soroti,naive,1260,2025-12,4,False,1260/1260/1260,Go to another market and sell now,Sell now,1,44,0,49,Low: a close call,Hoima,1247000.0
+Sorghum,Tororo,naive,2000,2025-04,12,True,2000/2000/2000,Go to another market and sell now,Sell now,1,46,0,49,Low: a close call,Mukono,1548000.0
+Sorghum,Wakiso,naive,2092,2025-04,12,True,2092/2092/2092,Go to another market and sell now,Sell now,1,46,0,49,Low: a close call,Owino,2041000.0

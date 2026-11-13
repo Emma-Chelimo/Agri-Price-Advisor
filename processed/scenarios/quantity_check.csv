@@ -1,0 +1,10 @@
+commodity,market,kg,outcome,gain_per_kg
+Maize,Gulu,100,Store 2 months at home,140.7
+Maize,Gulu,1000,Store 2 months at home,140.7
+Maize,Gulu,10000,Store 2 months at home,140.7
+Beans,Lira,100,Store 3 months at home,19.95
+Beans,Lira,1000,Store 3 months at home,19.95
+Beans,Lira,10000,Store 3 months at home,19.95
+Sorghum,Gulu,100,Sell now at home (storing close but under 60%),0.0
+Sorghum,Gulu,1000,Sell now at home (storing close but under 60%),0.0
+Sorghum,Gulu,10000,Sell now at home (storing close but under 60%),0.0
