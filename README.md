@@ -88,22 +88,67 @@ gap limits, staleness threshold) edit `src/config.py` and rebuild.
 ## Evaluating forecasts
 
 ```bash
-python scripts/run_backtest.py            # validation split, all models (~10 min)
+python scripts/run_backtest.py --test     # every model, calibration + validation + test (~15 min)
+python scripts/run_backtest.py --no-xgb   # skip the slow notebook XGBoost
 python scripts/run_backtest.py --fast     # baselines only (~20 s)
-python scripts/run_backtest.py --test     # also score the held-out test split
-python -m pytest -q                       # sanity tests (no look-ahead, splits, baselines)
+python -m pytest -q                       # tests (no look-ahead, splits, models, app)
 ```
 
 The backtest is walk-forward: at each month *t* a model sees only data up to
-*t*, forecasts 1 to 6 months ahead, and is scored against the price WFP
-recorded. Validation origins run from 2022-01 to 2023-12 (targets before
-2024-01 only); test origins start at 2024-01. Use validation for every
-modelling decision and report test once, at the end.
+*t*, forecasts 1 to 3 months ahead, and is scored against the price WFP
+recorded. Only prices from January 2008 to December 2025 are used
+(`config.DATA_START`, `config.EVAL_END`). There are three periods:
 
-Every model is compared with **naive** (repeat the latest price). Skill is
-`1 - MAE(model) / MAE(naive)`; above zero means the model is worth using.
-Results go to `processed/backtest/`. To add a model, write a function
-`forecast(history, horizon) -> array` and add it in `src/forecasters.py`.
+| Period | Forecast origins | Used for |
+|---|---|---|
+| Calibration | 2015-01 to 2021-12 | fitting the pooled model's shrinkage only |
+| Validation | 2022-01 to 2023-12 | choosing a model for each crop |
+| Test | 2024-01 to 2025-12 | the final, honest score |
+
+Targets never cross into the next period, so no period sees prices from a
+later one. Every model is compared with **naive** (repeat the latest price).
+Skill is `1 - MAE(model) / MAE(naive)`; above zero means the model is worth
+using. Results go to `processed/backtest/`:
+
+* `summary.csv`, `summary_by_crop.csv`: error, skill, share of series beaten,
+  direction accuracy, per horizon
+* `headline.csv`: averages over horizons 1 to 3
+* `decision_metrics.csv`: accuracy of confident calls (a predicted move of 5%
+  or more), how often a predicted rise happened, and how often real prices
+  fell inside the likely range
+* `selected_system.csv` (from `select_models.py`): the system as a farmer
+  gets it, each crop on its chosen model
+
+### The pooled model (Phase 3, `src/pooled.py`)
+
+The notebook's XGBoost lost to naive because it trained one small model per
+market (about 40 rows), predicted price levels that trees cannot extrapolate
+beyond, fed its own forecasts back month by month, and used the year as a
+feature. The pooled model fixes each of these:
+
+* one model per crop and horizon trained on **all markets** at once
+* the target is the **log change** from the latest real price
+* a **separate model for each horizon** (1 to 3 months)
+* features: the market's gap to the national and regional average, its gap
+  to its own 12-month average, volatility, the national 12-month change, the
+  month, and the crop's usual seasonal change from that month
+* the average of a small XGBoost model and a robust linear (Huber) model
+* features use only recorded prices (a missing month carries the last real
+  price forward for at most two months; nothing is interpolated from later
+  prices), and each model is trained only on targets up to its fit date
+
+`pooled_shrunk` multiplies the predicted change by a factor between 0 (naive)
+and 1 (the raw model), one per horizon, fitted on the calibration period
+(`processed/pooled_lambdas.json`).
+
+### Confidence calibration
+
+`scripts/calibrate_confidence.py` maps the advice's raw probability to how
+often advice with that probability was right in past decisions before 2024
+(`processed/confidence_calibration.json`), separately for "sell now" and
+"store". The app shows the calibrated figure; the storing rule (store only
+when the forecast gives at least a 60% chance of beating selling now) still
+uses the raw probability.
 
 ## Forecasts in the app
 
@@ -111,20 +156,21 @@ Results go to `processed/backtest/`. To add a model, write a function
 python scripts/build_dataset.py     # 1. clean data
 python scripts/run_backtest.py --test   # 2. score every method
 python scripts/select_models.py     # 3. choose a method per crop
-streamlit run app/app.py            # 4. the app reads processed/model_registry.json
+python -m uvicorn api.main:app --port 8000   # 4. the app reads processed/model_registry.json
 ```
 
 `select_models.py` picks, for each crop, the method with the best average
-validation skill over 1 to 6 months. A method replaces naive only if it beats
+validation skill over 1 to 3 months. A method replaces naive only if it beats
 it by at least `SELECTION_MIN_SKILL` (2%). It also stores an 80% forecast band
 for each crop and horizon, taken from that method's validation errors, and
 reports how often real test-period prices fell inside it.
 
 The app calls `src.forecasting.forecast(panel, crop, market, horizon)`. It
-forecasts from the latest observed price, never more than 6 months ahead, and
+forecasts from the latest observed price, never more than 3 months ahead, and
 falls back to naive if the chosen method cannot handle a market's history.
-When Phase 3 adds better models, register them in `src/forecasters.py`, rerun
-steps 2 and 3, and the app picks them up with no code changes.
+To add a model, register it in `src/forecasters.py` (and in `run_backtest.py`
+if it needs the whole panel, as the pooled model does), rerun steps 2 and 3,
+and the app picks it up with no other code changes.
 
 ## Using the app
 
@@ -236,8 +282,8 @@ python scripts/evaluate_advice.py      # about 2 minutes
 
 Every past month at every market is replayed as if a farmer with 1,000 kg asked
 for advice, using only data up to that month. The advice is scored with the
-prices that followed and compared with selling at harvest, always storing 3 or
-6 months, and the best timing in hindsight. A move to another market is scored
+prices that followed and compared with selling at harvest, always storing 1 or
+3 months, and the best timing in hindsight. A move to another market is scored
 at that market's price one month later. Results, a confidence check, the worst
 cases and sensitivity checks go to `processed/advice_eval/`.
 

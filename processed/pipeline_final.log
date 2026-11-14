@@ -1,0 +1,322 @@
+
+=== 1. Build dataset ===
+Cleaning steps
+                              step  rows_remaining  rows_removed
+                          raw rows           34328             0
+                       valid dates           34328             0
+                 target crops only           17530         16798
+                actual prices only           17530             0
+                   UGX per KG only           17530             0
+refugee settlement markets removed           13966          3564
+              positive prices only           13966             0
+        implausible prices removed           13964             2
+          one row per series-month           13818           146
+
+Markets kept: 30 (refugee settlements excluded)
+Crops: Beans, Cassava flour, Maize, Maize flour, Millet, Sorghum
+Markets per region: {'Central': 5, 'Eastern': 7, 'Northern': 12, 'Western': 6}
+
+Retail monthly panel: 14,590 rows, 154 series, reference month 2026-04
+  observed months:     12,335
+  interpolated months: 584 (gaps of 2 months or less)
+  long-gap months:     1,671 (left missing)
+  outlier flags:       43 (review, not removed)
+
+Stale series (no price for more than 6 months): 26 of 154
+
+Series per crop (fresh / stale):
+               fresh  stale
+commodity                  
+Beans             24      3
+Cassava flour     21      4
+Maize             22      5
+Maize flour       24      4
+Millet            17      5
+Sorghum           20      5
+
+Files written to /home/claude/AGRI-PRICE/processed
+--- 1. Build dataset: done in 3s
+
+=== 2. Walk-forward backtest ===
+Building pooled features...
+Calibration split (origins 2015-01 to 2022-01)
+  [calibration] 20/154 series, 18s
+  [calibration] 40/154 series, 31s
+  [calibration] 60/154 series, 46s
+  [calibration] 80/154 series, 52s
+  [calibration] 100/154 series, 67s
+  [calibration] 120/154 series, 81s
+  [calibration] 140/154 series, 95s
+Shrinkage lambda by crop and horizon (0 = naive, 1 = raw pooled model)
+                 1     2     3
+Beans          0.3  0.55  0.55
+Cassava flour  0.3  0.55  0.55
+Maize          0.3  0.55  0.55
+Maize flour    0.3  0.55  0.55
+Millet         0.3  0.55  0.55
+Sorghum        0.3  0.55  0.55 
+
+Models: naive, seasonal_naive, app_baseline, pooled_gbm, pooled_shrunk
+Splits: validation, test  (validation origins 2022-01 to 2024-01, test origins from 2024-01)
+  [validation] 20/154 series, 15s
+  [validation] 40/154 series, 27s
+  [validation] 60/154 series, 40s
+  [validation] 80/154 series, 50s
+  [validation] 100/154 series, 65s
+  [validation] 120/154 series, 77s
+  [validation] 140/154 series, 91s
+  [test] 20/154 series, 25s
+  [test] 40/154 series, 49s
+  [test] 60/154 series, 74s
+  [test] 80/154 series, 96s
+  [test] 100/154 series, 120s
+  [test] 120/154 series, 147s
+  [test] 140/154 series, 171s
+Done in 387s
+
+Summary (skill > 0 means better than 'same as last month')
+     split          model  horizon  n_series  n_pairs   MAPE  pooled_skill  median_skill  pct_beat  direction_acc
+      test   app_baseline        1       152     3043 27.204        -1.857        -2.173     1.974          0.542
+      test   app_baseline        2       152     2890 25.639        -0.854        -1.053     8.553          0.567
+      test   app_baseline        3       152     2738 24.505        -0.464        -0.551    17.105          0.556
+      test          naive        1       152     3043  8.635         0.000         0.000     0.000            NaN
+      test          naive        2       152     2890 12.776         0.000         0.000     0.000            NaN
+      test          naive        3       152     2738 15.851         0.000         0.000     0.000            NaN
+      test     pooled_gbm        1       152     3043  8.753        -0.013        -0.005    48.026          0.631
+      test     pooled_gbm        2       152     2890 12.676         0.015         0.037    54.605          0.650
+      test     pooled_gbm        3       152     2738 15.756         0.034         0.030    55.263          0.648
+      test  pooled_shrunk        1       152     3043  8.541         0.013         0.010    61.842          0.631
+      test  pooled_shrunk        2       152     2890 12.348         0.041         0.038    59.868          0.650
+      test  pooled_shrunk        3       152     2738 15.327         0.051         0.036    61.184          0.648
+      test seasonal_naive        1       152     3043 17.110        -1.007        -1.006     0.658          0.499
+      test seasonal_naive        2       152     2890 21.596        -0.698        -0.720     7.237          0.490
+      test seasonal_naive        3       152     2738 25.451        -0.606        -0.602     5.263          0.478
+validation   app_baseline        1        96     1524 21.236        -1.380        -1.308     9.375          0.500
+validation   app_baseline        2        93     1440 21.262        -0.597        -0.450    21.505          0.495
+validation   app_baseline        3        88     1358 21.539        -0.330        -0.294    23.864          0.509
+validation          naive        1        96     1524  9.322         0.000         0.000     0.000            NaN
+validation          naive        2        93     1440 13.798         0.000         0.000     0.000            NaN
+validation          naive        3        88     1358 16.625         0.000         0.000     0.000            NaN
+validation     pooled_gbm        1        96     1524  9.597        -0.015        -0.018    43.750          0.586
+validation     pooled_gbm        2        93     1440 13.450         0.045        -0.003    48.387          0.627
+validation     pooled_gbm        3        88     1358 16.297         0.041        -0.004    50.000          0.608
+validation  pooled_shrunk        1        96     1524  9.309         0.007         0.002    52.083          0.586
+validation  pooled_shrunk        2        93     1440 13.290         0.047         0.023    59.140          0.627
+validation  pooled_shrunk        3        88     1358 15.967         0.053         0.031    55.682          0.608
+validation seasonal_naive        1        96     1524 15.349        -0.658        -0.548    12.500          0.518
+validation seasonal_naive        2        93     1440 20.342        -0.492        -0.403    21.505          0.515
+validation seasonal_naive        3        88     1358 24.126        -0.482        -0.380    22.727          0.499
+
+Average over 3-6 months ahead
+     split          model   MAPE  pooled_skill  pct_beat  direction_acc
+      test   app_baseline 24.505        -0.464    17.105          0.556
+      test          naive 15.851         0.000     0.000            NaN
+      test     pooled_gbm 15.756         0.034    55.263          0.648
+      test  pooled_shrunk 15.327         0.051    61.184          0.648
+      test seasonal_naive 25.451        -0.606     5.263          0.478
+validation   app_baseline 21.539        -0.330    23.864          0.509
+validation          naive 16.625         0.000     0.000            NaN
+validation     pooled_gbm 16.297         0.041    50.000          0.608
+validation  pooled_shrunk 15.967         0.053    55.682          0.608
+validation seasonal_naive 24.126        -0.482    22.727          0.499
+
+Decision metrics
+     split          model  horizon  n_pairs  confident_n  up_n  band_coverage  confident_share  confident_dir_acc  up_call_hit
+      test   app_baseline        1     3043         2493  1400          0.648            0.819              0.434        0.437
+      test   app_baseline        2     2890         2340  1276          0.664            0.810              0.485        0.495
+      test   app_baseline        3     2738         2184  1121          0.711            0.798              0.500        0.515
+      test          naive        1     3043            0     0          0.823            0.000                NaN          NaN
+      test          naive        2     2890            0     0          0.809            0.000                NaN          NaN
+      test          naive        3     2738            0     0          0.810            0.000                NaN          NaN
+      test     pooled_gbm        1     3043          600   356          0.829            0.197              0.657        0.663
+      test     pooled_gbm        2     2890         1357   798          0.818            0.470              0.631        0.635
+      test     pooled_gbm        3     2738         1558   886          0.814            0.569              0.626        0.641
+      test  pooled_shrunk        1     3043            1     1          0.823            0.000              1.000        1.000
+      test  pooled_shrunk        2     2890          683   415          0.828            0.236              0.698        0.706
+      test  pooled_shrunk        3     2738          948   562          0.820            0.346              0.660        0.648
+      test seasonal_naive        1     3043         2167   917          0.703            0.712              0.393        0.422
+      test seasonal_naive        2     2890         2190   862          0.692            0.758              0.410        0.456
+      test seasonal_naive        3     2738         2165   777          0.685            0.791              0.407        0.453
+validation   app_baseline        1     1524          954   320          0.797            0.626              0.396        0.362
+validation   app_baseline        2     1440          867   287          0.797            0.602              0.428        0.397
+validation   app_baseline        3     1358          770   265          0.797            0.567              0.443        0.411
+validation          naive        1     1524            0     0          0.797            0.000                NaN          NaN
+validation          naive        2     1440            0     0          0.798            0.000                NaN          NaN
+validation          naive        3     1358            0     0          0.797            0.000                NaN          NaN
+validation     pooled_gbm        1     1524          339   218          0.797            0.222              0.584        0.578
+validation     pooled_gbm        2     1440          745   445          0.797            0.517              0.620        0.620
+validation     pooled_gbm        3     1358          836   456          0.797            0.616              0.580        0.618
+validation  pooled_shrunk        1     1524            0     0          0.797            0.000                NaN          NaN
+validation  pooled_shrunk        2     1440          352   205          0.797            0.244              0.727        0.751
+validation  pooled_shrunk        3     1358          504   274          0.797            0.371              0.663        0.719
+validation seasonal_naive        1     1524          728   476          0.797            0.478              0.423        0.374
+validation seasonal_naive        2     1440          713   481          0.798            0.495              0.449        0.428
+validation seasonal_naive        3     1358          685   484          0.797            0.504              0.428        0.401
+
+Files written to /home/claude/AGRI-PRICE/processed/backtest
+--- 2. Walk-forward backtest: done in 388s
+
+=== 3. Select models ===
+Selection rule: highest mean validation skill over horizons 1-3, must exceed 0.02 to replace naive
+Candidates: naive, pooled_gbm, pooled_shrunk
+
+Maize          -> pooled_shrunk   best average validation skill (+0.051), above the +0.02 margin
+                  validation MAPE by horizon: [11.13, 15.29, 19.16]
+                  test coverage of 80% band:  [0.838, 0.835, 0.848]
+Maize flour    -> naive           no method beat naive on validation; best challenger was pooled_shrunk at +0.011
+                  validation MAPE by horizon: [7.41, 11.53, 14.72]
+                  test coverage of 80% band:  [0.854, 0.87, 0.916]
+Beans          -> pooled_gbm      best average validation skill (+0.170), above the +0.02 margin
+                  validation MAPE by horizon: [8.4, 12.18, 14.0]
+                  test coverage of 80% band:  [0.847, 0.849, 0.791]
+Sorghum        -> naive           no method beat naive on validation; best challenger was pooled_shrunk at -0.038
+                  validation MAPE by horizon: [9.06, 13.22, 15.92]
+                  test coverage of 80% band:  [0.79, 0.738, 0.757]
+Millet         -> naive           no method beat naive on validation; best challenger was pooled_shrunk at +0.010
+                  validation MAPE by horizon: [11.31, 14.25, 15.08]
+                  test coverage of 80% band:  [0.817, 0.746, 0.739]
+Cassava flour  -> naive           no method beat naive on validation; best challenger was pooled_shrunk at -0.030
+                  validation MAPE by horizon: [8.12, 11.78, 15.01]
+                  test coverage of 80% band:  [0.776, 0.769, 0.73]
+
+Saved /home/claude/AGRI-PRICE/processed/model_registry.json
+
+The selected system (each crop's chosen model) vs naive
+     split  horizon  n_pairs   MAPE  pooled_skill  pct_beat  direction_acc  band_coverage  confident_dir_acc
+      test        1     3043  8.610        -0.000    21.711          0.685          0.822              0.665
+      test        2     2890 12.574         0.013    21.053          0.690          0.804              0.692
+      test        3     2738 15.479         0.029    23.026          0.684          0.801              0.686
+validation        1     1524  9.178         0.025    27.083          0.654          0.797              0.717
+validation        2     1440 13.017         0.074    30.108          0.697          0.798              0.743
+validation        3     1358 15.676         0.075    29.545          0.673          0.797              0.713
+--- 3. Select models: done in 1s
+
+=== 4. Evaluate advice ===
+Main evaluation
+  Maize: 1,840 decision points, 79s
+  Maize flour: 1,947 decision points, 84s
+  Beans: 1,857 decision points, 163s
+  Sorghum: 1,682 decision points, 167s
+  Millet: 1,459 decision points, 171s
+  Cassava flour: 1,723 decision points, 176s
+Sensitivity checks
+
+Harvest months, per 1,000 kg (gains are % of the harvest-sale earnings)
+   crop  decisions  advised_store_pct  advised_other_market_pct  avg_harvest_sale_ugx  timing_advice_gain_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct  store_1_gain_pct  store_3_gain_pct  hindsight_gain_pct
+  Beans        784               55.9                      51.7               3286854                    2.12                 10.35                    54.4                   18.0             -3.12             -2.19                6.36
+  Maize        765                2.2                      38.6               1319428                    0.20                  3.08                    24.9                   13.6             -6.65            -10.70                6.46
+ Millet        712                0.0                      60.3               2620795                    0.00                 10.94                    50.8                    8.6             -1.70             -2.06                8.25
+Sorghum        848                0.0                      65.1               1651500                    0.00                 37.51                    60.2                    4.0             -2.79             -4.50                6.88
+
+All crops together
+ decisions  advised_store_pct  advised_other_market_pct  avg_harvest_sale_ugx  timing_advice_gain_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct  store_1_gain_pct  store_3_gain_pct  hindsight_gain_pct
+      3109               14.6                      54.1               2204160                    0.81                 15.01                    47.8                   10.9             -3.19             -3.91                 7.0
+
+Before vs during the test period (harvest months)
+  period  decisions  advised_store_pct  advised_other_market_pct  avg_harvest_sale_ugx  timing_advice_gain_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct  store_1_gain_pct  store_3_gain_pct  hindsight_gain_pct
+pre-test       2109               15.0                      44.2               2060472                    1.03                 13.13                    41.1                   10.4             -2.68             -3.33                8.00
+    test       1000               13.8                      74.8               2507198                    0.42                 18.44                    63.0                   12.2             -4.12             -5.02                5.26
+
+Confidence check (timing advice)
+       band  decisions  stated_confidence_pct  actually_right_pct
+[0.0, 0.55)       9093                   42.1                49.7
+[0.55, 0.6)        671                   59.1                58.4
+[0.6, 0.75)        219                   65.4                80.4
+[0.75, 1.0)         27                   90.9                85.2
+
+Worst cases (full advice, harvest months)
+  crop    market decision_month   advice advice_market  alt_road_km  price_now  harvest_sale  full_advice   gain_ugx  gain_pct
+Millet    Kotido     2024-01-01 Sell now         Hoima        459.0     3600.0     3600000.0    1023000.0 -2577000.0     -71.6
+Millet   Mbarara     2024-01-01 Sell now         Hoima        312.0     4000.0     4000000.0    1464000.0 -2536000.0     -63.4
+Millet    Masaka     2024-01-01 Sell now         Hoima        263.0     4100.0     4100000.0    1611000.0 -2489000.0     -60.7
+Millet    Soroti     2024-01-01 Sell now         Hoima        331.0     3800.0     3800000.0    1407000.0 -2393000.0     -63.0
+Millet    Kasese     2024-01-01 Sell now         Hoima        260.0     4000.0     4000000.0    1620000.0 -2380000.0     -59.5
+Millet    Wakiso     2024-01-01 Sell now         Hoima        221.0     4000.0     4000000.0    1737000.0 -2263000.0     -56.6
+Millet Makaratin     2024-01-01 Sell now         Hoima        379.0     3500.0     3500000.0    1263000.0 -2237000.0     -63.9
+Millet    Mukono     2024-01-01 Sell now         Hoima        255.0     3825.0     3825000.0    1635000.0 -2190000.0     -57.3
+Millet     Jinja     2024-01-01 Sell now         Hoima        305.0     3575.0     3575000.0    1485000.0 -2090000.0     -58.5
+Millet     Owino     2024-01-01 Sell now         Hoima        238.0     3625.0     3625000.0    1686000.0 -1939000.0     -53.5
+
+Sensitivity (harvest months, all crops)
+                                                  scenario  decisions  advised_other_market_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct
+main (transport 3 UGX/kg/km, 1-month delay, jump guard on)       3109                      54.1                 15.01                    47.8                   10.9
+                             without the sudden-jump guard       3109                      54.9                 15.04                    48.3                   11.3
+                                    transport cost doubled       3109                      30.7                  7.10                    29.0                    9.7
+                 no delay before selling at another market       3109                      54.1                 19.31                    56.9                    2.8
+
+Done in 534s. Files in /home/claude/AGRI-PRICE/processed/advice_eval
+--- 4. Evaluate advice: done in 536s
+
+=== 5. Calibrate confidence ===
+advice            period  decisions  raw_stated_pct  calibrated_stated_pct  actually_right_pct
+  sell pre-test (fitted)       6081            52.9                   49.5                49.5
+  sell      test (check)       2916            52.6                   49.2                51.9
+ store pre-test (fitted)        707            74.9                   60.3                60.3
+ store      test (check)        306            76.4                   61.9                53.9
+
+Saved /home/claude/AGRI-PRICE/processed/confidence_calibration.json
+--- 5. Calibrate confidence: done in 1s
+
+=== 5b. Evaluate advice with calibrated confidence ===
+Main evaluation
+  Maize: 1,840 decision points, 79s
+  Maize flour: 1,947 decision points, 83s
+  Beans: 1,857 decision points, 164s
+  Sorghum: 1,682 decision points, 168s
+  Millet: 1,459 decision points, 172s
+  Cassava flour: 1,723 decision points, 176s
+Sensitivity checks
+
+Harvest months, per 1,000 kg (gains are % of the harvest-sale earnings)
+   crop  decisions  advised_store_pct  advised_other_market_pct  avg_harvest_sale_ugx  timing_advice_gain_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct  store_1_gain_pct  store_3_gain_pct  hindsight_gain_pct
+  Beans        784               55.9                      51.7               3286854                    2.12                 10.35                    54.4                   18.0             -3.12             -2.19                6.36
+  Maize        765                2.2                      38.6               1319428                    0.20                  3.08                    24.9                   13.6             -6.65            -10.70                6.46
+ Millet        712                0.0                      60.3               2620795                    0.00                 10.94                    50.8                    8.6             -1.70             -2.06                8.25
+Sorghum        848                0.0                      65.1               1651500                    0.00                 37.51                    60.2                    4.0             -2.79             -4.50                6.88
+
+All crops together
+ decisions  advised_store_pct  advised_other_market_pct  avg_harvest_sale_ugx  timing_advice_gain_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct  store_1_gain_pct  store_3_gain_pct  hindsight_gain_pct
+      3109               14.6                      54.1               2204160                    0.81                 15.01                    47.8                   10.9             -3.19             -3.91                 7.0
+
+Before vs during the test period (harvest months)
+  period  decisions  advised_store_pct  advised_other_market_pct  avg_harvest_sale_ugx  timing_advice_gain_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct  store_1_gain_pct  store_3_gain_pct  hindsight_gain_pct
+pre-test       2109               15.0                      44.2               2060472                    1.03                 13.13                    41.1                   10.4             -2.68             -3.33                8.00
+    test       1000               13.8                      74.8               2507198                    0.42                 18.44                    63.0                   12.2             -4.12             -5.02                5.26
+
+Confidence check (timing advice)
+       band  decisions  stated_confidence_pct  actually_right_pct
+[0.0, 0.55)       8457                   48.0                48.9
+[0.55, 0.6)        720                   56.9                54.0
+[0.6, 0.75)        460                   62.8                63.5
+[0.75, 1.0)        373                   80.0                80.4
+
+Worst cases (full advice, harvest months)
+  crop    market decision_month   advice advice_market  alt_road_km  price_now  harvest_sale  full_advice   gain_ugx  gain_pct
+Millet    Kotido     2024-01-01 Sell now         Hoima        459.0     3600.0     3600000.0    1023000.0 -2577000.0     -71.6
+Millet   Mbarara     2024-01-01 Sell now         Hoima        312.0     4000.0     4000000.0    1464000.0 -2536000.0     -63.4
+Millet    Masaka     2024-01-01 Sell now         Hoima        263.0     4100.0     4100000.0    1611000.0 -2489000.0     -60.7
+Millet    Soroti     2024-01-01 Sell now         Hoima        331.0     3800.0     3800000.0    1407000.0 -2393000.0     -63.0
+Millet    Kasese     2024-01-01 Sell now         Hoima        260.0     4000.0     4000000.0    1620000.0 -2380000.0     -59.5
+Millet    Wakiso     2024-01-01 Sell now         Hoima        221.0     4000.0     4000000.0    1737000.0 -2263000.0     -56.6
+Millet Makaratin     2024-01-01 Sell now         Hoima        379.0     3500.0     3500000.0    1263000.0 -2237000.0     -63.9
+Millet    Mukono     2024-01-01 Sell now         Hoima        255.0     3825.0     3825000.0    1635000.0 -2190000.0     -57.3
+Millet     Jinja     2024-01-01 Sell now         Hoima        305.0     3575.0     3575000.0    1485000.0 -2090000.0     -58.5
+Millet     Owino     2024-01-01 Sell now         Hoima        238.0     3625.0     3625000.0    1686000.0 -1939000.0     -53.5
+
+Sensitivity (harvest months, all crops)
+                                                  scenario  decisions  advised_other_market_pct  full_advice_gain_pct  full_advice_better_pct  full_advice_worse_pct
+main (transport 3 UGX/kg/km, 1-month delay, jump guard on)       3109                      54.1                 15.01                    47.8                   10.9
+                             without the sudden-jump guard       3109                      54.9                 15.04                    48.3                   11.3
+                                    transport cost doubled       3109                      30.7                  7.10                    29.0                    9.7
+                 no delay before selling at another market       3109                      54.1                 19.31                    56.9                    2.8
+
+Done in 527s. Files in /home/claude/AGRI-PRICE/processed/advice_eval
+--- 5b. Evaluate advice with calibrated confidence: done in 528s
+
+=== 6. Tests ===
+........................................................................ [ 80%]
+.................                                                        [100%]
+89 passed in 5.59s
+--- 6. Tests: done in 6s
+
+All steps finished in 1463s. Start the app with: streamlit run app/app.py

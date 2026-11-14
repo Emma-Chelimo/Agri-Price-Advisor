@@ -19,6 +19,7 @@ from fastapi.testclient import TestClient  # noqa: E402
 
 import api.main as main  # noqa: E402
 from api import settings  # noqa: E402
+from src import config as cfg  # noqa: E402
 from src.services import ServiceStore  # noqa: E402
 
 FARMER = "0772 123 456"
@@ -95,7 +96,7 @@ def test_broken_settings_file_is_reported(client, tmp_path, monkeypatch):
 # ------------------------------------------------------------------ data and advice
 def test_meta_markets_and_location(client):
     m = client.get("/api/meta").json()
-    assert "Maize" in m["crops"] and m["max_horizon"] == 6
+    assert "Maize" in m["crops"] and m["max_horizon"] == cfg.MAX_FORECAST_HORIZON == 3
     mk = client.get("/api/markets", params={"crop": "Millet"}).json()
     assert any(x["market"] == "Mbarara" for x in mk)
     near = client.post("/api/location/resolve", json={"crop": "Millet", "lat": -0.61, "lon": 30.66}).json()
@@ -111,7 +112,7 @@ def test_advice_json(client):
     a = r.json()
     json.dumps(a, allow_nan=False)                      # strict JSON, no NaN
     assert a["advice"]["recommendation"] == "Sell now"
-    assert len(a["forecast"]["points"]) == 6 and len(a["advice"]["options"]) == 7
+    assert len(a["forecast"]["points"]) == 3 and len(a["advice"]["options"]) == 4
     assert a["comparison"]["best_alternative"]["market"] == "Fort Portal"
     assert a["sell_market"] == "Fort Portal" and "Mbarara" in a["explanation_template"]
     bad = client.post("/api/advice", json={**ADVICE, "market": "Nowhere"}, headers=h)

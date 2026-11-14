@@ -15,7 +15,7 @@ Two parts:
 
 Selection rule
 --------------
-For each crop, average each candidate's validation skill over horizons 1-6.
+For each crop, average each candidate's validation skill over horizons 1-3.
 The best candidate replaces naive only if that average is at least
 SELECTION_MIN_SKILL above zero. Otherwise the crop uses naive.
 
@@ -59,9 +59,14 @@ def band_z(level: float) -> float:
 
 
 def _log_ratio_quantiles(fc: pd.DataFrame, level: float) -> tuple[float, float, int]:
-    """Symmetric band: half-width is the `level` quantile of |log error|."""
-    w = float(np.log(fc["actual"] / fc["forecast"]).abs().quantile(level))
-    return -w, w, int(len(fc))
+    """
+    Band from the signed errors log(actual / forecast): the (1-level)/2 and
+    (1+level)/2 quantiles. If prices tended to come in above the forecast, the
+    band leans upwards too, so the chance of a rise is not understated.
+    """
+    r = np.log(fc["actual"] / fc["forecast"])
+    lo, hi = float(r.quantile((1 - level) / 2)), float(r.quantile((1 + level) / 2))
+    return lo, hi, int(len(fc))
 
 
 def _coverage(fc: pd.DataFrame, q_lo: float, q_hi: float) -> float | None:
@@ -120,7 +125,8 @@ def build_registry(forecasts: pd.DataFrame | None = None, write: bool = True) ->
                 "validation_skill": round(float(row["pooled_skill"].iloc[0]), 3) if len(row) else None,
                 "band_log_low": round(q_lo, 4),
                 "band_log_high": round(q_hi, 4),
-                "log_sigma": round(q_hi / band_z(level), 4),
+                "log_bias": round((q_lo + q_hi) / 2, 4),
+                "log_sigma": round((q_hi - q_lo) / (2 * band_z(level)), 4),
                 "band_pairs": n,
                 "band_source": source,
                 "test_band_coverage": _coverage(t, q_lo, q_hi),
@@ -178,6 +184,8 @@ class Forecast:
     upper: list[float]
     level: float
     log_sigma: list[float] = field(default_factory=list)
+    # centre of the error distribution in log terms (0 = no lean), per horizon
+    log_bias: list[float] = field(default_factory=list)
     typical_error_pct: list[float | None] = field(default_factory=list)
     used_fallback: bool = False
     note: str = ""
@@ -234,7 +242,7 @@ def forecast_series(series: pd.DataFrame, crop: str, market: str, horizon: int,
         values = np.asarray(F.naive(history, horizon), dtype=float)
 
     # Bands: from the registry entry if it describes the model actually used.
-    lows, highs, errs, sigmas = [], [], [], []
+    lows, highs, errs, sigmas, biases = [], [], [], [], []
     hz = entry["horizons"] if entry and entry["model"] == model else {}
     for h in range(1, horizon + 1):
         b = hz.get(str(h))
@@ -242,8 +250,10 @@ def forecast_series(series: pd.DataFrame, crop: str, market: str, horizon: int,
             lows.append(b["band_log_low"]); highs.append(b["band_log_high"])
             errs.append(b["validation_MAPE"])
             sigmas.append(b.get("log_sigma", b["band_log_high"] / band_z(registry.get("interval_level", cfg.INTERVAL_LEVEL))))
+            biases.append(b.get("log_bias", 0.0))
         else:
             lows.append(np.nan); highs.append(np.nan); errs.append(None); sigmas.append(np.nan)
+            biases.append(0.0)
     lows, highs = np.array(lows, dtype=float), np.array(highs, dtype=float)
 
     origin_date = pd.Timestamp(history["date"].iloc[-1])
@@ -259,6 +269,7 @@ def forecast_series(series: pd.DataFrame, crop: str, market: str, horizon: int,
         upper=(values * np.exp(highs)).round(0).tolist(),
         level=registry.get("interval_level", cfg.INTERVAL_LEVEL),
         log_sigma=sigmas,
+        log_bias=biases,
         typical_error_pct=errs,
         used_fallback=used_fallback,
         note=note,

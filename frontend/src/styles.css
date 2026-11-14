@@ -247,3 +247,18 @@ details > summary { cursor: pointer; font-weight: 700; color: var(--green); padd
 .signin-form > div { width: 100%; max-width: 460px; }
 
 @media (max-width: 640px) { .actions > .btn { flex: 1 1 100%; } }
+
+/* closed-by-default detail on the advice page: a large, plain tap target */
+.more { border-top: 1px solid var(--line); }
+.more > summary { list-style: none; display: flex; align-items: center; gap: var(--s2); min-height: 52px;
+  padding: var(--s3) 0; font-size: var(--fs-md); color: var(--green); }
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary::before { content: "+"; display: inline-grid; place-items: center; width: 30px; height: 30px; flex: none;
+  border: 2px solid var(--green); border-radius: var(--r-control); font-weight: 800; line-height: 1; }
+.more[open] > summary::before { content: "\2212"; background: var(--green); color: var(--surface); }
+.more > summary:focus-visible { outline: 3px solid var(--maize); outline-offset: 2px; }
+.more .more-hide, .more[open] .more-show { display: none; }
+.more[open] .more-hide { display: inline; }
+.more-body { padding: 0 0 var(--s5); }
+.where-best { font-size: var(--fs-lg); margin: 0 0 var(--s2); }
+.verdict-more > summary { color: var(--ink); text-decoration: underline; font-weight: 700; }

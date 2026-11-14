@@ -1,0 +1,43 @@
+{
+  "fitted_on": "calibration origins 2015-01 to 2022-01 (exclusive), targets before 2022-01",
+  "lambdas": {
+    "Beans": {
+      "1": 0.3,
+      "2": 0.55,
+      "3": 0.55
+    },
+    "Cassava flour": {
+      "1": 0.3,
+      "2": 0.55,
+      "3": 0.55
+    },
+    "Maize": {
+      "1": 0.3,
+      "2": 0.55,
+      "3": 0.55
+    },
+    "Maize flour": {
+      "1": 0.3,
+      "2": 0.55,
+      "3": 0.55
+    },
+    "Millet": {
+      "1": 0.3,
+      "2": 0.55,
+      "3": 0.55
+    },
+    "Sorghum": {
+      "1": 0.3,
+      "2": 0.55,
+      "3": 0.55
+    }
+  },
+  "pairs": {
+    "Beans": 1283,
+    "Cassava flour": 1040,
+    "Maize": 1272,
+    "Maize flour": 1244,
+    "Millet": 925,
+    "Sorghum": 1118
+  }
+}

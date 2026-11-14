@@ -1,0 +1,5 @@
+advice,period,decisions,raw_stated_pct,calibrated_stated_pct,actually_right_pct
+sell,pre-test (fitted),6081,52.9,49.5,49.5
+sell,test (check),2916,52.6,49.2,51.9
+store,pre-test (fitted),707,74.9,60.3,60.3
+store,test (check),306,76.4,61.9,53.9

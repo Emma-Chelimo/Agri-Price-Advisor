@@ -44,7 +44,7 @@ def headline(ev: pd.DataFrame, label: str) -> dict:
 
 
 def main() -> None:
-    panel, markets = data.load_monthly(), data.load_markets()
+    panel, markets = data.eval_window(data.load_monthly()), data.load_markets()
     registry = forecasting.load_registry()
     t0 = time.time()
     print("Main evaluation")
@@ -68,7 +68,7 @@ def main() -> None:
     cols = ["crop", "decisions", "advised_store_pct", "advised_other_market_pct",
             "avg_harvest_sale_ugx", "timing_advice_gain_pct", "full_advice_gain_pct",
             "full_advice_better_pct", "full_advice_worse_pct",
-            "store_3_gain_pct", "store_6_gain_pct", "hindsight_gain_pct"]
+            "store_1_gain_pct", "store_3_gain_pct", "hindsight_gain_pct"]
     print(f"\nHarvest months, per {cfg.EVAL_QUANTITY_KG:,} kg (gains are % of the harvest-sale earnings)")
     print(res["summary_harvest"][cols].to_string(index=False))
     print("\nAll crops together")

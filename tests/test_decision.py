@@ -52,14 +52,14 @@ def test_flat_forecast_zero_costs_is_a_coin_flip_so_sell_now():
     adv = D.advise(make_fc([1000] * 6), qty=500, costs=costs)
     assert adv.recommendation == "Sell now"
     assert adv.best_store_prob == pytest.approx(0.5)
-    assert adv.confidence == pytest.approx(0.5)
+    assert adv.confidence_raw == pytest.approx(0.5)
 
 
 def test_clear_rise_recommends_storing_with_high_confidence():
     costs = D.Costs(storage_ugx_per_kg_month=10, loss_rate_per_month=0.005)
     adv = D.advise(make_fc([1050, 1150, 1300, 1300, 1250, 1200], sigma=0.05), 500, costs)
     assert adv.recommendation == "Store 3 months"
-    assert adv.gain_ugx > 0 and adv.confidence > cfg.STORE_MIN_PROBABILITY
+    assert adv.gain_ugx > 0 and adv.confidence_raw > cfg.STORE_MIN_PROBABILITY
 
 
 def test_small_gain_with_wide_uncertainty_still_sells_now():
@@ -128,3 +128,20 @@ def test_market_with_sudden_jump_is_not_suggested(three_markets):
     t = mc.table.set_index("market")
     assert t.at["Near", "sudden_jump"] and not t.at["Far", "sudden_jump"]
     assert D.best_alternative(mc)["market"] == "Far"
+
+
+def test_confidence_calibration_map(monkeypatch, tmp_path):
+    import json
+    from src import decision as D
+    p = tmp_path / "cal.json"
+    p.write_text(json.dumps({"sell": {"x": [0.4, 0.6], "y": [0.3, 0.5]},
+                             "store": {"x": [0.6, 0.9], "y": [0.55, 0.7]}}))
+    monkeypatch.setattr(D.cfg, "CONFIDENCE_CALIBRATION_JSON", p)
+    D.reset_calibration_cache()
+    assert D.calibrate_confidence(0.5, "sell") == pytest.approx(0.4)
+    assert D.calibrate_confidence(0.95, "store") == pytest.approx(0.7)     # clipped at the end
+    assert D.calibrate_confidence(None, "sell") is None
+    monkeypatch.setattr(D.cfg, "CONFIDENCE_CALIBRATION_JSON", tmp_path / "missing.json")
+    D.reset_calibration_cache()
+    assert D.calibrate_confidence(0.5, "sell") == 0.5                     # no map: unchanged
+    D.reset_calibration_cache()

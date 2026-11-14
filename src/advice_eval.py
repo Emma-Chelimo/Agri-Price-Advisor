@@ -16,7 +16,7 @@ after, and compared with simpler strategies:
                     EVAL_ALT_MARKET_LAG_MONTHS later, because the farmer only
                     learns the price from published data and then has to
                     travel, so the price may have changed by then.
-    store_3, store_6  always store 3 or 6 months, then sell at home
+    store_1, store_3  always store 1 or 3 months, then sell at home
     hindsight       the best timing in hindsight (upper bound, not achievable)
 
 Earnings use the same formulas and default costs as the app: storage cost
@@ -43,7 +43,7 @@ import pandas as pd
 from . import config as cfg
 from . import decision, forecasting
 
-STRATEGIES = ["harvest_sale", "timing_advice", "full_advice", "store_3", "store_6", "hindsight"]
+STRATEGIES = ["harvest_sale", "timing_advice", "full_advice", "store_1", "store_3", "hindsight"]
 
 
 @dataclass
@@ -176,9 +176,10 @@ def evaluate(panel: pd.DataFrame, markets: pd.DataFrame, registry: dict | None =
                     "advice": adv.recommendation, "advice_months": k_adv,
                     "advice_market": alt_m if go_alt else home, "moved_market": go_alt,
                     "alt_road_km": float(dist[home].get(alt_m, np.nan)) if go_alt else 0.0,
-                    "confidence": adv.confidence, "advice_right": right,
+                    "confidence": adv.confidence, "confidence_raw": adv.confidence_raw,
+                    "advice_right": right,
                     "harvest_sale": baseline, "timing_advice": timing, "full_advice": full,
-                    "store_3": store.get(3, np.nan), "store_6": store.get(6, np.nan),
+                    "store_1": store.get(1, np.nan), "store_3": store.get(3, np.nan),
                     "hindsight": hindsight,
                 })
         if verbose:

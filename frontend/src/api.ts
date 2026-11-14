@@ -84,7 +84,7 @@ export interface Advice {
   costs: { storage_ugx_per_kg_month: number; loss_pct_per_month: number; transport_ugx_per_kg_km: number };
   advice: {
     recommendation: string; months: number; expected_net_ugx: number; net_sell_now_ugx: number; gain_ugx: number;
-    confidence: number | null; confidence_label: string; best_store_months: number | null; best_store_prob: number | null;
+    confidence: number | null; confidence_raw: number | null; confidence_label: string; best_store_months: number | null; best_store_prob: number | null;
     store_min_probability: number; options: Option[];
   };
   comparison: { reference_month: string; excluded: string[]; markets: MarketRow[]; best_alternative: MarketRow | null; go_to_alternative: boolean };

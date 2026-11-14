@@ -43,6 +43,8 @@ selling now), which is exact when errors are perfectly correlated.
 
 from __future__ import annotations
 
+import json
+
 from dataclasses import dataclass
 from statistics import NormalDist
 
@@ -114,13 +116,17 @@ def timing_options(fc: forecasting.Forecast, qty: float, costs: Costs,
              "kg_sold": qty, "storage_ugx": 0.0, "transport_ugx": transport_ugx,
              "net_ugx": net_now, "gain_vs_now_ugx": 0.0, "breakeven_price": np.nan,
              "prob_beats_now": np.nan}]
-    for k, (f, lo, hi, sig) in enumerate(zip(fc.median, fc.lower, fc.upper, fc.log_sigma), start=1):
+    biases = fc.log_bias or [0.0] * len(fc.median)
+    for k, (f, lo, hi, sig, bias) in enumerate(
+            zip(fc.median, fc.lower, fc.upper, fc.log_sigma, biases), start=1):
         surviving = qty * (1 - costs.loss_rate_per_month) ** k
         storage = costs.storage_ugx_per_kg_month * qty * k
         net = f * surviving - storage - transport_ugx
         breakeven = (p0 * qty + storage) / surviving
         if sig is not None and np.isfinite(sig) and sig > 0:
-            prob = 1 - _N.cdf(np.log(breakeven / f) / sig)
+            # Chance the real price beats break-even, from the past forecast
+            # errors (centred on their lean, `bias`, and spread `sig`).
+            prob = 1 - _N.cdf((np.log(breakeven / f) - bias) / sig)
         else:
             prob = np.nan
         rows.append({"action": f"Store {k} month{'s' if k > 1 else ''}", "months": k,
@@ -143,6 +149,39 @@ class Advice:
     best_store_months: int | None          # storage option most likely to pay off
     best_store_prob: float | None
     options: pd.DataFrame
+    confidence_raw: float | None = None    # before calibration, for checking it
+
+
+# -----------------------------------------------------------------------------
+# Confidence calibration
+# -----------------------------------------------------------------------------
+_CAL: dict = {}
+
+
+def _calibration_map() -> dict:
+    if "map" not in _CAL:
+        p = cfg.CONFIDENCE_CALIBRATION_JSON
+        _CAL["map"] = json.loads(p.read_text()) if p.exists() else {}
+    return _CAL["map"]
+
+
+def calibrate_confidence(p: float | None, kind: str) -> float | None:
+    """
+    Turn the model's raw probability into how often advice stated with that
+    probability was right in the past (an isotonic map fitted on decisions
+    before the test period by scripts/calibrate_confidence.py). Without a
+    map the raw value is returned. `kind` is "sell" or "store".
+    """
+    if p is None or not np.isfinite(p):
+        return p
+    m = _calibration_map().get(kind)
+    if not m:
+        return p
+    return float(np.interp(p, m["x"], m["y"]))
+
+
+def reset_calibration_cache() -> None:
+    _CAL.clear()
 
 
 def advise(fc: forecasting.Forecast, qty: float, costs: Costs) -> Advice:
@@ -169,6 +208,8 @@ def advise(fc: forecasting.Forecast, qty: float, costs: Costs) -> Advice:
         conf = 1 - float(probs.max())
     else:
         conf = float(choice["prob_beats_now"])
+    conf_raw = conf
+    conf = calibrate_confidence(conf, "store" if choice["months"] > 0 else "sell")
 
     return Advice(
         recommendation=choice["action"], months=int(choice["months"]),
@@ -177,7 +218,7 @@ def advise(fc: forecasting.Forecast, qty: float, costs: Costs) -> Advice:
         gain_ugx=float(choice["gain_vs_now_ugx"]),
         confidence=conf, confidence_label=confidence_label(conf),
         best_store_months=best_store_months, best_store_prob=best_store_prob,
-        options=opts,
+        options=opts, confidence_raw=conf_raw,
     )
 
 

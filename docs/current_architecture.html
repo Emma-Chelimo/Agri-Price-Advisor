@@ -1,0 +1,137 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Current model architecture</title>
+<style>
+  body { margin:0; background:#ffffff; font-family: "Inter", "Segoe UI", Arial, sans-serif; }
+  svg text { font-family: inherit; }
+  .t { font-size:17px; font-weight:700; fill:#1d2b1f; }
+  .b { font-size:13.5px; fill:#33413a; }
+  .s { font-size:12px; fill:#5b6b61; }
+  .lab { font-size:12.5px; fill:#5b6b61; font-style:italic; }
+</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1600" viewBox="0 0 1400 1600">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5a50"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="1600" fill="#ffffff"/>
+  <text x="60" y="62" style="font-size:30px;font-weight:800;fill:#1d2b1f">AgriPrice Advisor: current forecasting architecture</text>
+  <text x="60" y="92" class="b">Six crops, about 150 retail market series, monthly WFP prices. Models judged on January 2008 to December 2025. Forecasts 1 to 3 months ahead.</text>
+
+  <!-- 1 data -->
+  <rect x="60" y="125" width="600" height="120" rx="10" fill="#eef0ec" stroke="#b9c2b7"/>
+  <text x="80" y="155" class="t">1. Data (scripts/build_dataset.py)</text>
+  <text x="80" y="180" class="b">WFP Uganda food prices, retail only</text>
+  <text x="80" y="200" class="b">Remove impossible prices (below 0.1x or above 10x the crop median)</text>
+  <text x="80" y="220" class="b">Monthly calendar; short gaps filled, long gaps split the series</text>
+
+  <!-- 2 features -->
+  <rect x="60" y="290" width="600" height="190" rx="10" fill="#eef0ec" stroke="#b9c2b7"/>
+  <text x="80" y="320" class="t">2. Pooled features (src/pooled.py)</text>
+  <text x="80" y="345" class="b">Only real prices; a missing month carries the last price for 2 months at most</text>
+  <text x="80" y="367" class="b">Own changes over 1, 3, 6, 12 months; 6-month volatility</text>
+  <text x="80" y="389" class="b">Gap to the market's own 12-month average</text>
+  <text x="80" y="411" class="b">Gap to the national and regional average for the crop</text>
+  <text x="80" y="433" class="b">National 1, 3, 12-month change; month; region</text>
+  <text x="80" y="455" class="b">Usual seasonal change for this crop, region and month</text>
+
+  <!-- 3 model -->
+  <rect x="60" y="525" width="600" height="250" rx="10" fill="#dfeedd" stroke="#6f9a6a" stroke-width="1.5"/>
+  <text x="80" y="555" class="t">3. Pooled direct model: pooled_gbm</text>
+  <text x="80" y="580" class="b">One model per crop and horizon (h = 1 to 3), trained on all markets</text>
+  <text x="80" y="602" class="b">Target: log(price in h months / price now)</text>
+  <rect x="90" y="622" width="250" height="78" rx="8" fill="#ffffff" stroke="#6f9a6a"/>
+  <text x="105" y="648" class="b" style="font-weight:700">XGBoost</text>
+  <text x="105" y="670" class="s">depth 2, 200 trees</text>
+  <text x="105" y="688" class="s">absolute-error objective</text>
+  <rect x="380" y="622" width="250" height="78" rx="8" fill="#ffffff" stroke="#6f9a6a"/>
+  <text x="395" y="648" class="b" style="font-weight:700">Huber regression</text>
+  <text x="395" y="670" class="s">robust linear model</text>
+  <text x="395" y="688" class="s">scaled features</text>
+  <text x="80" y="728" class="b">Average of the two predicted changes</text>
+  <text x="80" y="750" class="b">Refitted every quarter on targets dated up to the refit date</text>
+
+  <!-- 4 shrink -->
+  <rect x="60" y="820" width="600" height="120" rx="10" fill="#dfeedd" stroke="#6f9a6a" stroke-width="1.5"/>
+  <text x="80" y="850" class="t">4. Shrinkage towards last month: pooled_shrunk</text>
+  <text x="80" y="875" class="b">forecast = price now x exp(lambda x predicted change)</text>
+  <text x="80" y="897" class="b">One lambda per horizon, fitted on the calibration period</text>
+  <text x="80" y="919" class="b">lambda = 0 is naive, lambda = 1 is the raw pooled model</text>
+
+  <!-- baselines column -->
+  <rect x="740" y="525" width="600" height="250" rx="10" fill="#eef0ec" stroke="#b9c2b7"/>
+  <text x="760" y="555" class="t">Baselines and older models (src/forecasters.py)</text>
+  <text x="760" y="585" class="b" style="font-weight:700">naive</text>
+  <text x="870" y="585" class="b">next months = the latest real price</text>
+  <text x="870" y="605" class="s">also the yardstick: skill = 1 - MAE / MAE(naive)</text>
+  <text x="760" y="638" class="b" style="font-weight:700">seasonal naive</text>
+  <text x="900" y="638" class="b">same month last year, scaled to today's level</text>
+  <text x="760" y="671" class="b" style="font-weight:700">old dashboard</text>
+  <text x="900" y="671" class="b">last year's pattern plus a straight trend</text>
+  <text x="760" y="704" class="b" style="font-weight:700">notebook XGBoost</text>
+  <text x="925" y="704" class="b">one model per series, price level,</text>
+  <text x="925" y="724" class="b">forecasts fed back month by month</text>
+
+  <!-- 5 selection -->
+  <rect x="60" y="990" width="1280" height="170" rx="10" fill="#faeab5" stroke="#c9a94a" stroke-width="1.5"/>
+  <text x="80" y="1020" class="t">5. Model selection per crop (scripts/select_models.py) on validation, 2022 to 2023</text>
+  <text x="80" y="1045" class="b">Pick the candidate with the best average skill over h = 1 to 3. It must beat naive by more than +0.02, otherwise the crop keeps naive.</text>
+  <rect x="80" y="1065" width="390" height="75" rx="8" fill="#ffffff" stroke="#c9a94a"/>
+  <text x="95" y="1092" class="b" style="font-weight:700">Maize</text>
+  <text x="95" y="1116" class="b">pooled_shrunk</text>
+  <rect x="490" y="1065" width="390" height="75" rx="8" fill="#ffffff" stroke="#c9a94a"/>
+  <text x="505" y="1092" class="b" style="font-weight:700">Beans</text>
+  <text x="505" y="1116" class="b">pooled_gbm</text>
+  <rect x="900" y="1065" width="420" height="75" rx="8" fill="#ffffff" stroke="#c9a94a"/>
+  <text x="915" y="1092" class="b" style="font-weight:700">Cassava flour, Maize flour, Millet, Sorghum</text>
+  <text x="915" y="1116" class="b">naive (nothing beat it by enough)</text>
+
+  <!-- 6 bands -->
+  <rect x="60" y="1205" width="600" height="125" rx="10" fill="#eef0ec" stroke="#b9c2b7"/>
+  <text x="80" y="1235" class="t">6. Likely range (src/forecasting.py)</text>
+  <text x="80" y="1260" class="b">80% band from the 10th and 90th percentile of signed</text>
+  <text x="80" y="1280" class="b">log errors on validation, per crop and horizon</text>
+  <text x="80" y="1302" class="b">Also gives the bias and spread used by the advice</text>
+
+  <!-- 7 advice -->
+  <rect x="740" y="1205" width="600" height="125" rx="10" fill="#eef0ec" stroke="#b9c2b7"/>
+  <text x="760" y="1235" class="t">7. Advice (src/decision.py)</text>
+  <text x="760" y="1260" class="b">Storage cost, losses and transport per market</text>
+  <text x="760" y="1280" class="b">Store only if P(storing beats selling now) is at least 0.6</text>
+  <text x="760" y="1302" class="b">Confidence shown after isotonic calibration</text>
+
+  <!-- arrows -->
+  <line x1="360" y1="245" x2="360" y2="286" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="360" y1="480" x2="360" y2="521" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="360" y1="775" x2="360" y2="816" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="360" y1="940" x2="360" y2="986" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M660,185 C 1040,185 1040,330 1040,521" fill="none" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <text x="1060" y="420" class="lab">price history per series</text>
+  <line x1="1040" y1="775" x2="1040" y2="986" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <text x="1050" y="890" class="lab">candidates</text>
+  <line x1="700" y1="650" x2="700" y2="986" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)" stroke-dasharray="0"/>
+  <line x1="660" y1="650" x2="700" y2="650" stroke="#4a5a50" stroke-width="2"/>
+  <text x="560" y="975" class="lab" text-anchor="end">pooled_gbm, pooled_shrunk</text>
+  <line x1="360" y1="1160" x2="360" y2="1201" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="660" y1="1267" x2="736" y2="1267" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="1040" y1="1160" x2="1040" y2="1201" stroke="#4a5a50" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- timeline -->
+  <text x="60" y="1395" class="t">How the data is split in time (no future prices leak into any step)</text>
+  <rect x="60" y="1415" width="450" height="56" fill="#eef0ec" stroke="#b9c2b7"/>
+  <rect x="510" y="1415" width="480" height="56" fill="#dfeedd" stroke="#6f9a6a"/>
+  <rect x="990" y="1415" width="160" height="56" fill="#faeab5" stroke="#c9a94a"/>
+  <rect x="1150" y="1415" width="190" height="56" fill="#f3d7cf" stroke="#b5786a"/>
+  <text x="80" y="1448" class="b">History only, 2008 to 2014</text>
+  <text x="525" y="1440" class="b" style="font-weight:700">Calibration</text>
+  <text x="525" y="1460" class="s">2015 to 2021: fit lambda</text>
+  <text x="1003" y="1440" class="b" style="font-weight:700">Validation</text>
+  <text x="1003" y="1460" class="s">2022 to 2023: choose</text>
+  <text x="1163" y="1440" class="b" style="font-weight:700">Test</text>
+  <text x="1163" y="1460" class="s">2024 to 2025: scored once</text>
+  <text x="60" y="1510" class="b">Every forecast is made walk-forward: at each month the model sees only prices up to that month, forecasts 1 to 3 months ahead, and is scored</text>
+  <text x="60" y="1530" class="b">against the price WFP actually recorded. Models are refitted every quarter with targets dated up to the refit date.</text>
+  <text x="60" y="1575" class="s">Test 2024 to 2025, selected system: skill vs naive 0.000, +0.013, +0.029 at 1, 2, 3 months; MAPE 8.6%, 12.6%, 15.5% (accuracy 87.8% on average); direction right 68.6%</text>
+</svg>
+</body></html>

@@ -11,6 +11,8 @@ Steps
   2. run_backtest.py       walk-forward test of every forecaster -> processed/backtest/
   3. select_models.py      method and bands per crop             -> processed/model_registry.json
   4. evaluate_advice.py    advice tested on past prices          -> processed/advice_eval/
+  5. calibrate_confidence.py  confidence matched to past outcomes -> processed/confidence_calibration.json
+     (then the advice test is run once more so its files show the calibrated figures)
   5. pytest                all tests
 """
 
@@ -46,15 +48,17 @@ def main() -> None:
 
     run("1. Build dataset", [py, "scripts/build_dataset.py"])
     if not args.skip_backtest:
-        run("2. Walk-forward backtest", [py, "scripts/run_backtest.py", "--test"])
+        run("2. Walk-forward backtest", [py, "scripts/run_backtest.py", "--test", "--no-xgb"])
     run("3. Select models", [py, "scripts/select_models.py"])
     run("4. Evaluate advice", [py, "scripts/evaluate_advice.py"])
+    run("5. Calibrate confidence", [py, "scripts/calibrate_confidence.py"])
+    run("5b. Evaluate advice with calibrated confidence", [py, "scripts/evaluate_advice.py"])
     if args.notebook:
         run("Notebook", [py, "-m", "jupyter", "nbconvert", "--to", "notebook", "--execute",
                          "--inplace", "AgriPrice_Advisor_EDA_and_Modeling.ipynb"])
     if args.demo_providers:
         run("Demo providers", [py, "scripts/seed_demo_providers.py"])
-    run("5. Tests", [py, "-m", "pytest", "-q", "tests"])
+    run("6. Tests", [py, "-m", "pytest", "-q", "tests"])
     print(f"\nAll steps finished in {time.time() - t0:.0f}s. Start the app with: "
           "streamlit run app/app.py")
 

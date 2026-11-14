@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { api, monthYear, num, pct, perKg, ugx, type Advice } from "../api";
 import { adviceRequest, useApp } from "../state";
@@ -8,6 +8,7 @@ import Prose from "../components/Prose";
 
 export default function AdvicePage() {
   const { plan, meta } = useApp();
+  const assistantOn = !!meta?.assistant.enabled;
   const req = adviceRequest(plan);
   const [a, setA] = useState<Advice | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -50,8 +51,9 @@ export default function AdvicePage() {
         </div>
 
         <div className="stack">
-          <section>
-            <h2>Price in {a.market}</h2>
+          <Markets a={a} />
+
+          <More title="price chart">
             <p className="muted">
               Last recorded <strong className="num">{perKg(a.latest.price)}</strong> in {monthYear(a.latest.date)}.
               {" "}{a.forecast.label.replace(/\s*\([^)]*\)\s*$/, "")}.
@@ -59,14 +61,27 @@ export default function AdvicePage() {
             {latestNote && <p className="faint">{latestNote}</p>}
             <PriceChart a={a} />
             {a.forecast.note && <p className="faint" style={{ marginTop: 8 }}>{a.forecast.note}</p>}
-          </section>
-
-          <Markets a={a} />
-          <StorageOptions a={a} />
-          <Explanation a={a} assistantOn={!!meta?.assistant.enabled} />
+          </More>
+          <MarketDetails a={a} />
+          <More title="storage options">
+            <StorageOptions a={a} />
+          </More>
+          <More title={assistantOn ? "why this advice, and ask a question" : "why this advice"}>
+            <Explanation a={a} assistantOn={assistantOn} />
+          </More>
         </div>
       </div>
     </div>
+  );
+}
+
+// A closed-by-default section. Farmers see the answer first; the detail is one tap away.
+function More({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <details className="more">
+      <summary><span className="more-show">Show</span><span className="more-hide">Hide</span> {title}</summary>
+      <div className="more-body">{children}</div>
+    </details>
   );
 }
 
@@ -75,59 +90,70 @@ function Markets({ a }: { a: Advice }) {
   const c = a.comparison;
   const home = c.markets.find((m) => m.is_home);
   const alt = c.best_alternative;
+  const best = c.go_to_alternative && alt ? alt : home;
   return (
     <section className="section">
       <h2>Where to sell</h2>
-      {!alt || !home ? (
-        <p className="muted">No other market has a {a.crop.toLowerCase()} price for {monthYear(c.reference_month + (c.reference_month.length === 7 ? "-01" : ""))} to compare with.</p>
+      {!alt || !home || !best ? (
+        <p className="muted">Sell in {a.market}. No other market has a {a.crop.toLowerCase()} price this month to compare with.</p>
       ) : (
         <>
+          <p className="where-best"><strong>{best.market}</strong>{best.is_home ? ", your market" : `, ${num(best.road_km)} km by road`}</p>
           <p className="muted">
             {c.go_to_alternative
-              ? `${alt.market} pays more, even after the cost of getting there.`
+              ? `${alt.market} pays more, even after paying ${ugx(alt.transport_ugx)} to get there.`
               : `${a.market} is still your best choice once transport is paid for.`}
           </p>
-          <div className="compare">
-            {[home, alt].map((m) => {
-              const better = c.go_to_alternative ? m === alt : m === home;
-              return (
-                <div key={m.market} className={better ? "better" : undefined}>
-                  <strong style={{ fontSize: "var(--fs-md)" }}>{m.market}</strong>
-                  <div className="faint">{m.is_home ? "Your market" : `${num(m.road_km)} km by road`}</div>
-                  <dl>
-                    <dt>Price</dt><dd>{perKg(m.latest_price)}</dd>
-                    <dt>Transport</dt><dd>{m.is_home ? "none" : ugx(m.transport_ugx)}</dd>
-                    <dt>You get</dt><dd>{ugx(m.sell_now_net_ugx)}</dd>
-                  </dl>
-                </div>
-              );
-            })}
-          </div>
-          <details style={{ marginTop: 12 }}>
-            <summary>All {c.markets.length} markets with a price this month</summary>
-            <div className="table-wrap">
-              <table>
-                <thead><tr><th>Market</th><th>Road km</th><th>UGX/kg</th><th>You get</th><th>vs. {a.market}</th></tr></thead>
-                <tbody>
-                  {c.markets.map((m) => (
-                    <tr key={m.market} className={m.market === alt.market ? "best" : undefined}>
-                      <td>{m.market}{m.sudden_jump && <span className="faint"> (sudden jump, check first)</span>}</td>
-                      <td>{m.is_home ? "0" : num(m.road_km)}</td>
-                      <td>{num(m.latest_price)}</td>
-                      <td>{num(m.sell_now_net_ugx)}</td>
-                      <td className={m.vs_home_sell_now_ugx > 0 ? "up" : m.vs_home_sell_now_ugx < 0 ? "down" : undefined}>
-                        {m.is_home ? "" : `${m.vs_home_sell_now_ugx > 0 ? "+" : ""}${num(m.vs_home_sell_now_ugx)}`}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {c.excluded.length > 0 && <p className="faint">Left out because their latest price is older: {c.excluded.join(", ")}.</p>}
-          </details>
         </>
       )}
     </section>
+  );
+}
+
+function MarketDetails({ a }: { a: Advice }) {
+  const c = a.comparison;
+  const home = c.markets.find((m) => m.is_home);
+  const alt = c.best_alternative;
+  if (!alt || !home) return null;
+  return (
+    <More title="other markets">
+      <div className="compare">
+        {[home, alt].map((m) => {
+          const better = c.go_to_alternative ? m === alt : m === home;
+          return (
+            <div key={m.market} className={better ? "better" : undefined}>
+              <strong style={{ fontSize: "var(--fs-md)" }}>{m.market}</strong>
+              <div className="faint">{m.is_home ? "Your market" : `${num(m.road_km)} km by road`}</div>
+              <dl>
+                <dt>Price</dt><dd>{perKg(m.latest_price)}</dd>
+                <dt>Transport</dt><dd>{m.is_home ? "none" : ugx(m.transport_ugx)}</dd>
+                <dt>You get</dt><dd>{ugx(m.sell_now_net_ugx)}</dd>
+              </dl>
+            </div>
+          );
+        })}
+      </div>
+      <h3 style={{ marginTop: 20 }}>All {c.markets.length} markets with a price this month</h3>
+      <div className="table-wrap">
+        <table>
+          <thead><tr><th>Market</th><th>Road km</th><th>UGX/kg</th><th>You get</th><th>vs. {a.market}</th></tr></thead>
+          <tbody>
+            {c.markets.map((m) => (
+              <tr key={m.market} className={m.market === alt.market ? "best" : undefined}>
+                <td>{m.market}{m.sudden_jump && <span className="faint"> (sudden jump, check first)</span>}</td>
+                <td>{m.is_home ? "0" : num(m.road_km)}</td>
+                <td>{num(m.latest_price)}</td>
+                <td>{num(m.sell_now_net_ugx)}</td>
+                <td className={m.vs_home_sell_now_ugx > 0 ? "up" : m.vs_home_sell_now_ugx < 0 ? "down" : undefined}>
+                  {m.is_home ? "" : `${m.vs_home_sell_now_ugx > 0 ? "+" : ""}${num(m.vs_home_sell_now_ugx)}`}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {c.excluded.length > 0 && <p className="faint">Left out because their latest price is older: {c.excluded.join(", ")}.</p>}
+    </More>
   );
 }
 
@@ -136,10 +162,9 @@ function StorageOptions({ a }: { a: Advice }) {
   const opts = a.advice.options;
   const now = opts[0];
   return (
-    <section className="section">
-      <h2>If you store in {a.market}</h2>
+    <div>
       <p className="muted">
-        Storing pays only when the price climbs above the break-even, which covers storage at {num(a.costs.storage_ugx_per_kg_month)} UGX/kg a month
+        If you store in {a.market}, it pays only when the price climbs above the break-even, which covers storage at {num(a.costs.storage_ugx_per_kg_month)} UGX/kg a month
         and losing {a.costs.loss_pct_per_month.toFixed(1)}% of the crop each month.
       </p>
       <ul className="list">
@@ -162,7 +187,7 @@ function StorageOptions({ a }: { a: Advice }) {
         })}
       </ul>
       <p className="faint" style={{ marginTop: 8 }}>Selling now at {a.market} gives {ugx(now.net_ugx)}.</p>
-    </section>
+    </div>
   );
 }
 
@@ -205,8 +230,7 @@ function Explanation({ a, assistantOn }: { a: Advice; assistantOn: boolean }) {
   }
 
   return (
-    <section className="section">
-      <h2>Why this advice</h2>
+    <div>
       {source === "loading" && <p className="faint" aria-live="polite">Writing a plain-language explanation…</p>}
       <Prose text={text} />
       {source === "ai" && <p className="faint">Written by an AI assistant from the figures above. Numbers it mentions are checked against them.</p>}
@@ -228,6 +252,6 @@ function Explanation({ a, assistantOn }: { a: Advice; assistantOn: boolean }) {
           {askError && <p className="error" role="alert">{askError}</p>}
         </>
       )}
-    </section>
+    </div>
   );
 }

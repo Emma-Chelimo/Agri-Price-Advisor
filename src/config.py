@@ -157,12 +157,26 @@ STALE_AFTER_MONTHS = 6
 OUTLIER_Z = 5.0
 OUTLIER_MIN_JUMP = 0.405
 
+# Prices below PRICE_MIN_RATIO or above PRICE_MAX_RATIO times the crop's
+# median price are typing or unit errors and are removed before anything else.
+PRICE_MIN_RATIO = 0.1
+PRICE_MAX_RATIO = 10.0
+
 # -----------------------------------------------------------------------------
 # Evaluation (walk-forward backtest)
 # -----------------------------------------------------------------------------
-# Forecast horizons in months. The app's sell-or-store advice looks up to six
+# Forecast horizons in months. The app forecasts and advises up to three
 # months ahead, so every model is judged at each of these horizons.
-HORIZONS = [1, 2, 3, 4, 5, 6]
+# (Up to October 2026 the project used 1-6 months; those results are kept in
+# processed/archive_2008_h1to6/.)
+HORIZONS = [1, 2, 3]
+
+# Prices used to evaluate and choose models: January 2008 to December 2025.
+# The backtest, model choice, advice evaluation and confidence calibration
+# only see prices in this window (data.eval_window). The app itself forecasts
+# from the latest prices available.
+DATA_START = "2008-01"
+EVAL_END = "2025-12"
 
 # Calendar cutoffs shared by every series, so a pooled model trained across
 # markets can never learn from a month that another series is tested on.
@@ -173,6 +187,17 @@ HORIZONS = [1, 2, 3, 4, 5, 6]
 #               report final results.
 VALIDATION_START = "2022-01"
 TEST_START = "2024-01"
+
+# calibration: forecast origins from CALIBRATION_START up to VALIDATION_START,
+#              targets before VALIDATION_START. Used only to fit the pooled
+#              model's shrinkage towards naive (src/pooled.py), so validation
+#              stays a fair contest between models.
+CALIBRATION_START = "2015-01"
+POOLED_LAMBDAS_JSON = PROCESSED_DIR / "pooled_lambdas.json"
+
+# A forecast counts as a "confident call" for direction accuracy when it
+# predicts a move of at least this much (5% = 0.05) from the latest price.
+CONFIDENT_MOVE = 0.05
 
 # A forecast origin needs at least this many observed months of history.
 MIN_TRAIN_MONTHS = 24
@@ -195,8 +220,9 @@ FALLBACK_MODEL = "naive"
 SELECTION_MIN_SKILL = 0.02
 
 # Methods that are never selected for the app. app_baseline is the old
-# dashboard forecast, kept in the backtest only as a reference point.
-NOT_SELECTABLE = {"app_baseline"}
+# dashboard forecast and seasonal_naive the old seasonal baseline; both are
+# kept in the backtest only as reference points (both lose clearly to naive).
+NOT_SELECTABLE = {"app_baseline", "seasonal_naive"}
 
 # Forecast bands shown in the app cover this share of past outcomes.
 # They come from the selected model's validation errors for that crop and
@@ -303,6 +329,10 @@ EVAL_MIN_HISTORY_MONTHS = 12
 EVAL_ALT_MARKET_LAG_MONTHS = 1
 
 ADVICE_EVAL_DIR = PROCESSED_DIR / "advice_eval"
+
+# Maps the advice's raw probability to how often such advice was right before
+# the test period (written by scripts/calibrate_confidence.py).
+CONFIDENCE_CALIBRATION_JSON = PROCESSED_DIR / "confidence_calibration.json"
 
 # -----------------------------------------------------------------------------
 # Services platform (Phase 9, Objectives 5 and 6)

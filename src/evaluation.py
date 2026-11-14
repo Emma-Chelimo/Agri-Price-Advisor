@@ -51,11 +51,13 @@ def split_bounds(split: str) -> tuple[pd.Timestamp, pd.Timestamp | None, pd.Time
     """Return (first origin, last origin exclusive, last target exclusive)."""
     val = pd.Period(cfg.VALIDATION_START, "M").to_timestamp()
     test = pd.Period(cfg.TEST_START, "M").to_timestamp()
+    if split == "calibration":
+        return pd.Period(cfg.CALIBRATION_START, "M").to_timestamp(), val, val
     if split == "validation":
         return val, test, test
     if split == "test":
         return test, None, None
-    raise ValueError("split must be 'validation' or 'test'")
+    raise ValueError("split must be 'calibration', 'validation' or 'test'")
 
 
 # -----------------------------------------------------------------------------
@@ -204,6 +206,71 @@ def summary(fc: pd.DataFrame, by: list[str] | None = None) -> pd.DataFrame:
     return out.round(3)
 
 
+def decision_metrics(fc: pd.DataFrame, level: float = cfg.INTERVAL_LEVEL,
+                     big_move: float = cfg.CONFIDENT_MOVE) -> pd.DataFrame:
+    """
+    Measures that matter for sell-or-store advice, per split, model and horizon.
+
+    confident_share   share of forecasts that predict a move of at least
+                      `big_move` (5%) from the latest price
+    confident_dir_acc of those confident calls, how often the price really
+                      moved that way
+    up_call_hit       of forecasts predicting a rise of at least `big_move`,
+                      how often the price really rose (what "store" relies on)
+    band_coverage     share of real prices inside the model's likely range.
+                      The range is fitted on VALIDATION errors (per crop and
+                      horizon, the central `level` of signed log errors, as the
+                      app's range is) and applied to
+                      each split, so on test it is an honest check; the target
+                      is `level` (80%)
+    """
+    f = fc.copy()
+    f["pred"] = np.log(f["forecast"] / f["origin_price"])
+    f["real"] = np.log(f["actual"] / f["origin_price"])
+    f["log_err"] = np.log(f["actual"] / f["forecast"])
+    vg = f[f["split"] == "validation"].groupby(["model", "commodity", "horizon"])["log_err"]
+    band = pd.concat([vg.quantile((1 - level) / 2).rename("band_lo"),
+                      vg.quantile((1 + level) / 2).rename("band_hi")], axis=1)
+    f = f.join(band, on=["model", "commodity", "horizon"])
+    f["inside"] = np.where(f["band_lo"].notna(),
+                           (f["log_err"] >= f["band_lo"]) & (f["log_err"] <= f["band_hi"]), np.nan)
+    f["confident"] = f["pred"].abs() >= big_move
+    f["conf_hit"] = f["confident"] & (np.sign(f["pred"]) == np.sign(f["real"]))
+    f["up_call"] = f["pred"] >= big_move
+    f["up_hit"] = f["up_call"] & (f["real"] > 0)
+
+    g = f.groupby(["split", "model", "horizon"])
+    out = g.agg(n_pairs=("pred", "size"), confident_n=("confident", "sum"),
+                conf_hits=("conf_hit", "sum"), up_n=("up_call", "sum"),
+                up_hits=("up_hit", "sum"), band_coverage=("inside", "mean")).reset_index()
+    out["confident_share"] = out["confident_n"] / out["n_pairs"]
+    out["confident_dir_acc"] = np.where(out["confident_n"] > 0,
+                                        out["conf_hits"] / out["confident_n"].clip(lower=1), np.nan)
+    out["up_call_hit"] = np.where(out["up_n"] > 0, out["up_hits"] / out["up_n"].clip(lower=1), np.nan)
+    out = out.drop(columns=["conf_hits", "up_hits"])
+    return out.round(3)
+
+
+def headline(summ: pd.DataFrame, horizons=None) -> pd.DataFrame:
+    """Average skill and MAPE over the forecast horizons (config.HORIZONS by default)."""
+    s = summ[summ["horizon"].isin(horizons or cfg.HORIZONS)]
+    return (s.groupby(["split", "model"])
+            .agg(MAPE=("MAPE", "mean"), pooled_skill=("pooled_skill", "mean"),
+                 pct_beat=("pct_beat", "mean"), direction_acc=("direction_acc", "mean"))
+            .round(3).reset_index())
+
+
+def selected_forecasts(fc: pd.DataFrame, registry: dict) -> pd.DataFrame:
+    """
+    The forecasts the app would actually have shown: for each crop, the rows
+    of the model the registry chose for it (chosen on validation), renamed
+    "selected". Returned together with naive so skill can be computed.
+    """
+    choice = {c: e["model"] for c, e in registry.get("crops", {}).items()}
+    picked = fc[fc["model"] == fc["commodity"].map(choice)].assign(model="selected")
+    return pd.concat([fc[fc["model"] == "naive"], picked], ignore_index=True)
+
+
 def wide_skill(summ: pd.DataFrame, value: str = "pooled_skill") -> pd.DataFrame:
     """Models as rows, horizons as columns; handy for the report."""
     return summ.pivot_table(index=["split", "model"], columns="horizon", values=value).round(3)
@@ -218,14 +285,23 @@ def run_and_save(panel: pd.DataFrame, forecasters: dict[str, Forecaster],
     out_dir.mkdir(parents=True, exist_ok=True)
     fcs = [backtest(panel, forecasters, split=s, **kw) for s in splits]
     fc = pd.concat(fcs, ignore_index=True)
+    return save_results(fc, out_dir)
+
+
+def save_results(fc: pd.DataFrame, out_dir) -> dict:
+    out_dir.mkdir(parents=True, exist_ok=True)
     res = {
         "forecasts": fc,
         "series_metrics": series_metrics(fc),
         "summary": summary(fc),
         "summary_by_crop": summary(fc, by=["commodity"]),
+        "decision_metrics": decision_metrics(fc),
     }
+    res["headline"] = headline(res["summary"])
     fc.to_parquet(out_dir / "forecasts.parquet", index=False)
     res["series_metrics"].to_csv(out_dir / "metrics_by_series.csv", index=False)
     res["summary"].to_csv(out_dir / "summary.csv", index=False)
     res["summary_by_crop"].to_csv(out_dir / "summary_by_crop.csv", index=False)
+    res["decision_metrics"].to_csv(out_dir / "decision_metrics.csv", index=False)
+    res["headline"].to_csv(out_dir / "headline.csv", index=False)
     return res

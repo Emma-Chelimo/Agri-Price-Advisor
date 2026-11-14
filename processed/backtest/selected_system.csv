@@ -1,0 +1,7 @@
+split,model,horizon,n_pairs,n_series,MAE,MAPE,pooled_skill,direction_acc,median_MAPE,median_skill,pct_beat,band_coverage,confident_share,confident_dir_acc,up_call_hit
+test,selected,1,3043,152,186.31,8.61,-0.0,0.685,7.8,0.0,21.711,0.822,0.062,0.665,0.667
+test,selected,2,2890,152,272.184,12.574,0.013,0.69,10.783,0.0,21.053,0.804,0.188,0.692,0.714
+test,selected,3,2738,152,333.214,15.479,0.029,0.684,13.546,0.0,23.026,0.801,0.231,0.686,0.718
+validation,selected,1,1524,96,226.952,9.178,0.025,0.654,7.726,0.0,27.083,0.797,0.06,0.717,0.735
+validation,selected,2,1440,93,320.607,13.017,0.074,0.697,11.037,0.0,30.108,0.798,0.203,0.743,0.803
+validation,selected,3,1358,88,389.189,15.676,0.075,0.673,13.214,0.0,29.545,0.797,0.241,0.713,0.808

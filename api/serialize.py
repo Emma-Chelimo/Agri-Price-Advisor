@@ -62,6 +62,7 @@ def advice(r: AdviceResult) -> dict:
             "recommendation": adv.recommendation, "months": adv.months,
             "expected_net_ugx": adv.expected_net_ugx, "net_sell_now_ugx": adv.net_sell_now_ugx,
             "gain_ugx": adv.gain_ugx, "confidence": adv.confidence,
+            "confidence_raw": adv.confidence_raw,
             "confidence_label": adv.confidence_label,
             "best_store_months": adv.best_store_months, "best_store_prob": adv.best_store_prob,
             "store_min_probability": cfg.STORE_MIN_PROBABILITY,

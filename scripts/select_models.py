@@ -16,7 +16,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+import pandas as pd  # noqa: E402
+
 from src import config as cfg  # noqa: E402
+from src import evaluation as ev  # noqa: E402
 from src.forecasting import build_registry  # noqa: E402
 
 
@@ -32,6 +35,20 @@ def main() -> None:
         print(f"{'':<17} validation MAPE by horizon: {mape}")
         print(f"{'':<17} test coverage of {level}% band:  {cov}")
     print(f"\nSaved {cfg.MODEL_REGISTRY_JSON}")
+
+    # The system as a farmer gets it: each crop's chosen model, scored on test.
+    fc = pd.read_parquet(cfg.BACKTEST_DIR / "forecasts.parquet")
+    sel = ev.selected_forecasts(fc, reg)
+    summ = ev.summary(sel)
+    dm = ev.decision_metrics(sel)
+    out = summ.merge(dm[["split", "model", "horizon", "band_coverage", "confident_share",
+                         "confident_dir_acc", "up_call_hit"]], on=["split", "model", "horizon"])
+    out = out[out["model"] == "selected"]
+    out.to_csv(cfg.BACKTEST_DIR / "selected_system.csv", index=False)
+    pd.set_option("display.width", 200)
+    print("\nThe selected system (each crop's chosen model) vs naive")
+    print(out[["split", "horizon", "n_pairs", "MAPE", "pooled_skill", "pct_beat", "direction_acc",
+               "band_coverage", "confident_dir_acc"]].to_string(index=False))
 
 
 if __name__ == "__main__":

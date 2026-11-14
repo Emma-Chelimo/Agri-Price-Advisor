@@ -185,6 +185,8 @@ MODEL_LABELS = {
     "seasonal_naive": "Same month last year, adjusted (seasonal naive)",
     "app_baseline": "Old dashboard forecast",
     "xgb_current": "XGBoost",
+    "pooled_gbm": "Pooled model across markets",
+    "pooled_shrunk": "Pooled model, shrunk towards last month",
 }
 
 
@@ -192,6 +194,9 @@ def get_forecaster(name: str) -> Forecaster:
     """Look up a forecaster by the name used in the backtest and registry."""
     if name == "xgb_current":
         return XGBCurrent(refit_every=1)
+    if name in ("pooled_gbm", "pooled_shrunk"):
+        from .pooled import app_forecaster
+        return app_forecaster(name)
     models = default_forecasters(include_xgb=False)
     if name not in models:
         raise KeyError(f"Unknown forecaster '{name}'. Add it to src/forecasters.py.")

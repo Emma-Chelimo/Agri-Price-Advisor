@@ -53,7 +53,7 @@ Cassava flour,Tororo,Retail,Eastern,2021-07-01,2025-04-01,46,44,2,0,1,46,95.7,0,
 Cassava flour,Wakiso,Retail,Central,2022-03-01,2025-04-01,38,37,1,0,1,38,97.4,0,1569.0,12,True
 Maize,Busia,Retail,Eastern,2022-03-01,2025-12-01,46,45,1,0,1,46,97.8,0,1250.0,4,False
 Maize,Fort Portal,Retail,Western,2022-03-01,2025-12-01,46,44,2,0,1,46,95.7,0,2250.0,4,False
-Maize,Gulu,Retail,Northern,2011-04-01,2026-04-01,181,170,5,6,3,91,93.9,1,1949.0,0,False
+Maize,Gulu,Retail,Northern,2011-04-01,2026-04-01,181,169,6,6,3,91,93.4,0,1949.0,0,False
 Maize,Hoima,Retail,Western,2021-07-01,2025-12-01,54,50,4,0,1,54,92.6,0,1500.0,4,False
 Maize,Iganga,Retail,Eastern,2011-04-01,2025-12-01,177,154,9,14,4,46,87.0,0,1533.0,4,False
 Maize,Jinja,Retail,Eastern,2011-04-01,2025-12-01,177,97,0,80,3,48,54.8,0,1863.0,4,False

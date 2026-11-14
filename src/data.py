@@ -112,6 +112,12 @@ def clean_prices(raw: pd.DataFrame) -> tuple[pd.DataFrame, CleaningLog]:
     df = df[df["price"] > 0]
     clog.add("positive prices only", len(df))
 
+    # Impossible prices (e.g. maize at 2 UGX/kg in Gulu, June 2021) are
+    # typing or unit errors: drop prices far outside the crop's usual range.
+    med = df.groupby(["commodity", "pricetype"])["price"].transform("median")
+    df = df[(df["price"] >= med * cfg.PRICE_MIN_RATIO) & (df["price"] <= med * cfg.PRICE_MAX_RATIO)]
+    clog.add("implausible prices removed", len(df))
+
     df["region"] = df["admin1"].map(map_region)
 
     # Resolve duplicates within a month: keep the highest-priority source
@@ -350,6 +356,13 @@ def load_monthly(path: Path | None = None) -> pd.DataFrame:
     df["date"] = pd.to_datetime(df["date"])
     df["period"] = df["date"].dt.to_period("M")
     return df
+
+
+def eval_window(panel: pd.DataFrame) -> pd.DataFrame:
+    """The prices used for evaluation and model choice (config.DATA_START to EVAL_END)."""
+    start = pd.Period(cfg.DATA_START, "M").to_timestamp()
+    end = pd.Period(cfg.EVAL_END, "M").to_timestamp()
+    return panel[(panel["date"] >= start) & (panel["date"] <= end)].copy()
 
 
 def load_series_summary(path: Path | None = None) -> pd.DataFrame:
